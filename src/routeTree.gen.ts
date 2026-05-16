@@ -9,8 +9,62 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WaterResponseRouteImport } from './routes/water-response'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as ServicesRouteImport } from './routes/services'
+import { Route as RepairsRouteImport } from './routes/repairs'
+import { Route as RemodelsRouteImport } from './routes/remodels'
+import { Route as DrainBackupRouteImport } from './routes/drain-backup'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CommercialRouteImport } from './routes/commercial'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 
+const WaterResponseRoute = WaterResponseRouteImport.update({
+  id: '/water-response',
+  path: '/water-response',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServicesRoute = ServicesRouteImport.update({
+  id: '/services',
+  path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RepairsRoute = RepairsRouteImport.update({
+  id: '/repairs',
+  path: '/repairs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RemodelsRoute = RemodelsRouteImport.update({
+  id: '/remodels',
+  path: '/remodels',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DrainBackupRoute = DrainBackupRouteImport.update({
+  id: '/drain-backup',
+  path: '/drain-backup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CommercialRoute = CommercialRouteImport.update({
+  id: '/commercial',
+  path: '/commercial',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +73,158 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/commercial': typeof CommercialRoute
+  '/contact': typeof ContactRoute
+  '/drain-backup': typeof DrainBackupRoute
+  '/remodels': typeof RemodelsRoute
+  '/repairs': typeof RepairsRoute
+  '/services': typeof ServicesRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/water-response': typeof WaterResponseRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/commercial': typeof CommercialRoute
+  '/contact': typeof ContactRoute
+  '/drain-backup': typeof DrainBackupRoute
+  '/remodels': typeof RemodelsRoute
+  '/repairs': typeof RepairsRoute
+  '/services': typeof ServicesRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/water-response': typeof WaterResponseRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/commercial': typeof CommercialRoute
+  '/contact': typeof ContactRoute
+  '/drain-backup': typeof DrainBackupRoute
+  '/remodels': typeof RemodelsRoute
+  '/repairs': typeof RepairsRoute
+  '/services': typeof ServicesRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/water-response': typeof WaterResponseRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/commercial'
+    | '/contact'
+    | '/drain-backup'
+    | '/remodels'
+    | '/repairs'
+    | '/services'
+    | '/sitemap.xml'
+    | '/water-response'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/about'
+    | '/commercial'
+    | '/contact'
+    | '/drain-backup'
+    | '/remodels'
+    | '/repairs'
+    | '/services'
+    | '/sitemap.xml'
+    | '/water-response'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/commercial'
+    | '/contact'
+    | '/drain-backup'
+    | '/remodels'
+    | '/repairs'
+    | '/services'
+    | '/sitemap.xml'
+    | '/water-response'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  CommercialRoute: typeof CommercialRoute
+  ContactRoute: typeof ContactRoute
+  DrainBackupRoute: typeof DrainBackupRoute
+  RemodelsRoute: typeof RemodelsRoute
+  RepairsRoute: typeof RepairsRoute
+  ServicesRoute: typeof ServicesRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  WaterResponseRoute: typeof WaterResponseRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/water-response': {
+      id: '/water-response'
+      path: '/water-response'
+      fullPath: '/water-response'
+      preLoaderRoute: typeof WaterResponseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/services': {
+      id: '/services'
+      path: '/services'
+      fullPath: '/services'
+      preLoaderRoute: typeof ServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/repairs': {
+      id: '/repairs'
+      path: '/repairs'
+      fullPath: '/repairs'
+      preLoaderRoute: typeof RepairsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/remodels': {
+      id: '/remodels'
+      path: '/remodels'
+      fullPath: '/remodels'
+      preLoaderRoute: typeof RemodelsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/drain-backup': {
+      id: '/drain-backup'
+      path: '/drain-backup'
+      fullPath: '/drain-backup'
+      preLoaderRoute: typeof DrainBackupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/commercial': {
+      id: '/commercial'
+      path: '/commercial'
+      fullPath: '/commercial'
+      preLoaderRoute: typeof CommercialRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,6 +237,15 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  CommercialRoute: CommercialRoute,
+  ContactRoute: ContactRoute,
+  DrainBackupRoute: DrainBackupRoute,
+  RemodelsRoute: RemodelsRoute,
+  RepairsRoute: RepairsRoute,
+  ServicesRoute: ServicesRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
+  WaterResponseRoute: WaterResponseRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
