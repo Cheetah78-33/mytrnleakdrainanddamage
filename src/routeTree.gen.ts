@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WaterResponseRouteImport } from './routes/water-response'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as RepairsRouteImport } from './routes/repairs'
 import { Route as RemodelsRouteImport } from './routes/remodels'
@@ -22,6 +23,11 @@ import { Route as IndexRouteImport } from './routes/index'
 const WaterResponseRoute = WaterResponseRouteImport.update({
   id: '/water-response',
   path: '/water-response',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ServicesRoute = ServicesRouteImport.update({
@@ -74,6 +80,7 @@ export interface FileRoutesByFullPath {
   '/remodels': typeof RemodelsRoute
   '/repairs': typeof RepairsRoute
   '/services': typeof ServicesRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/water-response': typeof WaterResponseRoute
 }
 export interface FileRoutesByTo {
@@ -85,6 +92,7 @@ export interface FileRoutesByTo {
   '/remodels': typeof RemodelsRoute
   '/repairs': typeof RepairsRoute
   '/services': typeof ServicesRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/water-response': typeof WaterResponseRoute
 }
 export interface FileRoutesById {
@@ -97,6 +105,7 @@ export interface FileRoutesById {
   '/remodels': typeof RemodelsRoute
   '/repairs': typeof RepairsRoute
   '/services': typeof ServicesRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/water-response': typeof WaterResponseRoute
 }
 export interface FileRouteTypes {
@@ -110,6 +119,7 @@ export interface FileRouteTypes {
     | '/remodels'
     | '/repairs'
     | '/services'
+    | '/sitemap.xml'
     | '/water-response'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -121,6 +131,7 @@ export interface FileRouteTypes {
     | '/remodels'
     | '/repairs'
     | '/services'
+    | '/sitemap.xml'
     | '/water-response'
   id:
     | '__root__'
@@ -132,6 +143,7 @@ export interface FileRouteTypes {
     | '/remodels'
     | '/repairs'
     | '/services'
+    | '/sitemap.xml'
     | '/water-response'
   fileRoutesById: FileRoutesById
 }
@@ -144,6 +156,7 @@ export interface RootRouteChildren {
   RemodelsRoute: typeof RemodelsRoute
   RepairsRoute: typeof RepairsRoute
   ServicesRoute: typeof ServicesRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   WaterResponseRoute: typeof WaterResponseRoute
 }
 
@@ -154,6 +167,13 @@ declare module '@tanstack/react-router' {
       path: '/water-response'
       fullPath: '/water-response'
       preLoaderRoute: typeof WaterResponseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/services': {
@@ -224,6 +244,7 @@ const rootRouteChildren: RootRouteChildren = {
   RemodelsRoute: RemodelsRoute,
   RepairsRoute: RepairsRoute,
   ServicesRoute: ServicesRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   WaterResponseRoute: WaterResponseRoute,
 }
 export const routeTree = rootRouteImport
