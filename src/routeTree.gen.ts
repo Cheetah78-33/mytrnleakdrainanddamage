@@ -14,6 +14,9 @@ import { Route as ServicesRouteImport } from './routes/services'
 import { Route as RepairsRouteImport } from './routes/repairs'
 import { Route as RemodelsRouteImport } from './routes/remodels'
 import { Route as DrainBackupRouteImport } from './routes/drain-backup'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CommercialRouteImport } from './routes/commercial'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 
 const WaterResponseRoute = WaterResponseRouteImport.update({
@@ -41,6 +44,21 @@ const DrainBackupRoute = DrainBackupRouteImport.update({
   path: '/drain-backup',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CommercialRoute = CommercialRouteImport.update({
+  id: '/commercial',
+  path: '/commercial',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -49,6 +67,9 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/commercial': typeof CommercialRoute
+  '/contact': typeof ContactRoute
   '/drain-backup': typeof DrainBackupRoute
   '/remodels': typeof RemodelsRoute
   '/repairs': typeof RepairsRoute
@@ -57,6 +78,9 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/commercial': typeof CommercialRoute
+  '/contact': typeof ContactRoute
   '/drain-backup': typeof DrainBackupRoute
   '/remodels': typeof RemodelsRoute
   '/repairs': typeof RepairsRoute
@@ -66,6 +90,9 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/commercial': typeof CommercialRoute
+  '/contact': typeof ContactRoute
   '/drain-backup': typeof DrainBackupRoute
   '/remodels': typeof RemodelsRoute
   '/repairs': typeof RepairsRoute
@@ -76,6 +103,9 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/about'
+    | '/commercial'
+    | '/contact'
     | '/drain-backup'
     | '/remodels'
     | '/repairs'
@@ -84,6 +114,9 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/about'
+    | '/commercial'
+    | '/contact'
     | '/drain-backup'
     | '/remodels'
     | '/repairs'
@@ -92,6 +125,9 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/about'
+    | '/commercial'
+    | '/contact'
     | '/drain-backup'
     | '/remodels'
     | '/repairs'
@@ -101,6 +137,9 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  CommercialRoute: typeof CommercialRoute
+  ContactRoute: typeof ContactRoute
   DrainBackupRoute: typeof DrainBackupRoute
   RemodelsRoute: typeof RemodelsRoute
   RepairsRoute: typeof RepairsRoute
@@ -145,6 +184,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DrainBackupRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/commercial': {
+      id: '/commercial'
+      path: '/commercial'
+      fullPath: '/commercial'
+      preLoaderRoute: typeof CommercialRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -157,6 +217,9 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  CommercialRoute: CommercialRoute,
+  ContactRoute: ContactRoute,
   DrainBackupRoute: DrainBackupRoute,
   RemodelsRoute: RemodelsRoute,
   RepairsRoute: RepairsRoute,
