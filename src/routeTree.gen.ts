@@ -9,12 +9,36 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WaterResponseRouteImport } from './routes/water-response'
 import { Route as ServicesRouteImport } from './routes/services'
+import { Route as RepairsRouteImport } from './routes/repairs'
+import { Route as RemodelsRouteImport } from './routes/remodels'
+import { Route as DrainBackupRouteImport } from './routes/drain-backup'
 import { Route as IndexRouteImport } from './routes/index'
 
+const WaterResponseRoute = WaterResponseRouteImport.update({
+  id: '/water-response',
+  path: '/water-response',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RepairsRoute = RepairsRouteImport.update({
+  id: '/repairs',
+  path: '/repairs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RemodelsRoute = RemodelsRouteImport.update({
+  id: '/remodels',
+  path: '/remodels',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DrainBackupRoute = DrainBackupRouteImport.update({
+  id: '/drain-backup',
+  path: '/drain-backup',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -25,37 +49,100 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/drain-backup': typeof DrainBackupRoute
+  '/remodels': typeof RemodelsRoute
+  '/repairs': typeof RepairsRoute
   '/services': typeof ServicesRoute
+  '/water-response': typeof WaterResponseRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/drain-backup': typeof DrainBackupRoute
+  '/remodels': typeof RemodelsRoute
+  '/repairs': typeof RepairsRoute
   '/services': typeof ServicesRoute
+  '/water-response': typeof WaterResponseRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/drain-backup': typeof DrainBackupRoute
+  '/remodels': typeof RemodelsRoute
+  '/repairs': typeof RepairsRoute
   '/services': typeof ServicesRoute
+  '/water-response': typeof WaterResponseRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/services'
+  fullPaths:
+    | '/'
+    | '/drain-backup'
+    | '/remodels'
+    | '/repairs'
+    | '/services'
+    | '/water-response'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/services'
-  id: '__root__' | '/' | '/services'
+  to:
+    | '/'
+    | '/drain-backup'
+    | '/remodels'
+    | '/repairs'
+    | '/services'
+    | '/water-response'
+  id:
+    | '__root__'
+    | '/'
+    | '/drain-backup'
+    | '/remodels'
+    | '/repairs'
+    | '/services'
+    | '/water-response'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DrainBackupRoute: typeof DrainBackupRoute
+  RemodelsRoute: typeof RemodelsRoute
+  RepairsRoute: typeof RepairsRoute
   ServicesRoute: typeof ServicesRoute
+  WaterResponseRoute: typeof WaterResponseRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/water-response': {
+      id: '/water-response'
+      path: '/water-response'
+      fullPath: '/water-response'
+      preLoaderRoute: typeof WaterResponseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/services': {
       id: '/services'
       path: '/services'
       fullPath: '/services'
       preLoaderRoute: typeof ServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/repairs': {
+      id: '/repairs'
+      path: '/repairs'
+      fullPath: '/repairs'
+      preLoaderRoute: typeof RepairsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/remodels': {
+      id: '/remodels'
+      path: '/remodels'
+      fullPath: '/remodels'
+      preLoaderRoute: typeof RemodelsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/drain-backup': {
+      id: '/drain-backup'
+      path: '/drain-backup'
+      fullPath: '/drain-backup'
+      preLoaderRoute: typeof DrainBackupRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -70,7 +157,11 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DrainBackupRoute: DrainBackupRoute,
+  RemodelsRoute: RemodelsRoute,
+  RepairsRoute: RepairsRoute,
   ServicesRoute: ServicesRoute,
+  WaterResponseRoute: WaterResponseRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
