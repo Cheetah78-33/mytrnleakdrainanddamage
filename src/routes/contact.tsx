@@ -72,7 +72,7 @@ function Page() {
                   <Mail className="h-6 w-6 text-[color:var(--gold-bright)] mt-1" />
                   <div>
                     <div className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">Email</div>
-                    <a href="mailto:response@mytrn.co" className="font-display text-lg text-white hover:text-[color:var(--gold-bright)]">response@mytrn.co</a>
+                    <a href="mailto:Mytrnentr@gmail.com" className="font-display text-lg text-white hover:text-[color:var(--gold-bright)]">Mytrnentr@gmail.com</a>
                   </div>
                 </li>
               </ul>
