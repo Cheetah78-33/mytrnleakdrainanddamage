@@ -9,7 +9,7 @@ import { Phone, Droplet, Waves, Hammer, Wrench, ShieldCheck, Building2, PaintBuc
 import { useEffect, useState } from "react";
 import logo from "@/assets/logo.png";
 import valve from "@/assets/valve.jpg";
-import heroBg from "@/assets/hero-bg.png";
+import heroBg from "@/assets/hero-bg.jpg";
 import toilet from "@/assets/toilet.jpg";
 import ducts from "@/assets/ducts.jpg";
 
