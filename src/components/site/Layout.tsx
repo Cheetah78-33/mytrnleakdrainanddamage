@@ -112,7 +112,7 @@ function Footer() {
           <ul className="space-y-2 text-sm text-muted-foreground">
             <li><a href="tel:5107895001" className="hover:text-[color:var(--gold-bright)]">📞 510-789-5001</a></li>
             <li>📍 Bay Area, California</li>
-            <li>✉ response@mytrn.co</li>
+            <li>✉ Mytrnentr@gmail.com</li>
           </ul>
           <div className="mt-5 inline-flex flex-col gap-1 border border-gold px-4 py-3 text-[11px] uppercase tracking-[0.18em] text-[color:var(--gold-bright)]">
             <span>Licensed & Bonded</span>
