@@ -9,6 +9,7 @@ import { Phone, Droplet, Waves, Hammer, Wrench, ShieldCheck, Building2, PaintBuc
 import { useEffect, useState } from "react";
 import logo from "@/assets/logo.png";
 import valve from "@/assets/valve.jpg";
+import heroBg from "@/assets/hero-bg.png";
 import toilet from "@/assets/toilet.jpg";
 import ducts from "@/assets/ducts.jpg";
 
@@ -62,8 +63,9 @@ function Home() {
       {/* HERO */}
       <section className="relative isolate overflow-hidden">
         <div className="absolute inset-0 -z-10">
-          <img src={valve} alt="" className="absolute inset-0 h-full w-full object-cover opacity-30" />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/85 to-background" />
+          <img src={heroBg} alt="" className="absolute inset-0 h-full w-full object-cover object-center opacity-90" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-black/40" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-background" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(212,175,55,0.18),transparent_65%)]" />
         </div>
         <Particles count={28} />
