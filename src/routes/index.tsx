@@ -63,10 +63,10 @@ function Home() {
       {/* HERO */}
       <section className="relative isolate overflow-hidden">
         <div className="absolute inset-0 -z-10">
-          <img src={heroBg} alt="" className="absolute inset-0 h-full w-full object-cover object-center opacity-90" />
-          <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-black/40" />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-background" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(212,175,55,0.18),transparent_65%)]" />
+          <img src={heroBg} alt="" className="absolute inset-0 h-full w-full object-cover object-center" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-black/20 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-background" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(212,175,55,0.12),transparent_65%)]" />
         </div>
         <Particles count={28} />
         <div className="mx-auto max-w-7xl px-5 py-32 md:py-44">
