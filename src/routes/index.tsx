@@ -8,10 +8,11 @@ import { CTABanner } from "@/components/site/CTABanner";
 import { Phone, Droplet, Waves, Hammer, Wrench, ShieldCheck, Building2, PaintBucket, Sparkles, Award, Clock, Flame, ChevronRight, Quote } from "lucide-react";
 import { useEffect, useState } from "react";
 import logo from "@/assets/logo.png";
-import valve from "@/assets/valve.jpg";
 import heroBg from "@/assets/hero-bg.jpg";
-import toilet from "@/assets/toilet.jpg";
-import ducts from "@/assets/ducts.jpg";
+import workVanity from "@/assets/work-vanity.jpg";
+import workShower from "@/assets/work-shower.jpg";
+import workBathroom from "@/assets/work-bathroom.jpg";
+import workDrain from "@/assets/work-drain.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({ meta: [
@@ -156,7 +157,7 @@ function Home() {
         <div className="mx-auto max-w-7xl px-5 grid lg:grid-cols-2 gap-12 items-center">
           <Reveal>
             <div className="relative aspect-[4/5] overflow-hidden rounded-sm border border-gold">
-              <img src={ducts} alt="MYTRN crew at work in a property" className="h-full w-full object-cover transition-transform duration-[2000ms] hover:scale-105" />
+              <img src={workShower} alt="MYTRN finished bathroom rebuild" className="h-full w-full object-cover transition-transform duration-[2000ms] hover:scale-105" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
               <div className="absolute bottom-6 left-6 right-6">
                 <div className="text-[11px] uppercase tracking-[0.28em] text-[color:var(--gold-bright)]">On-Site · Bay Area</div>
@@ -214,12 +215,12 @@ function Home() {
           <SectionHeading eyebrow="Featured" title="Signature Service Offerings" />
           <div className="flex gap-5 overflow-x-auto pb-6 snap-x snap-mandatory -mx-5 px-5">
             {[
-              { t: "Leak Damage Repair", i: valve },
-              { t: "Drain Backup Cleanup", i: toilet },
-              { t: "Water Damage Rebuild", i: ducts },
-              { t: "Kitchen Damage Repair", i: valve },
-              { t: "Bathroom Repair", i: toilet },
-              { t: "Commercial Facility Repair", i: ducts },
+              { t: "Bathroom Rebuild", i: workShower },
+              { t: "Vanity & Cabinetry", i: workVanity },
+              { t: "Drain Backup Response", i: workDrain },
+              { t: "Finish Carpentry", i: workBathroom },
+              { t: "Tile & Shower Repair", i: workShower },
+              { t: "Commercial Drain Cleanup", i: workDrain },
             ].map((c) => (
               <div key={c.t} className="group relative min-w-[300px] md:min-w-[380px] aspect-[3/4] snap-start overflow-hidden rounded-sm border border-gold cursor-pointer">
                 <img src={c.i} alt={c.t} className="h-full w-full object-cover transition-transform duration-[1500ms] group-hover:scale-110" />
