@@ -91,7 +91,7 @@ function Home() {
             </Reveal>
             <Reveal delay={380}>
               <div className="mt-10 flex flex-wrap gap-4 justify-center">
-                <GoldLink href="tel:5107895001"><Phone className="h-4 w-4" /> Get Emergency Help</GoldLink>
+                <GoldLink href="tel:5108905792"><Phone className="h-4 w-4" /> Get Emergency Help</GoldLink>
                 <GoldLink to="/contact" variant="outline">Request Inspection</GoldLink>
                 <GoldLink to="/services" variant="outline">View Services <ChevronRight className="h-4 w-4" /></GoldLink>
               </div>
