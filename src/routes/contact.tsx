@@ -11,7 +11,7 @@ import valve from "@/assets/valve.jpg";
 export const Route = createFileRoute("/contact")({
   head: () => ({ meta: [
     { title: "Contact & Emergency Response — MYTRN" },
-    { name: "description", content: "Need immediate help? Reach the MYTRN response line at 510-789-5001 or send an emergency request." },
+    { name: "description", content: "Need immediate help? Reach the MYTRN response line at 510-890-5792 or send an emergency request." },
   ]}),
   component: Page,
 });
@@ -58,7 +58,7 @@ function Page() {
                   <Phone className="h-6 w-6 text-[color:var(--gold-bright)] mt-1" />
                   <div>
                     <div className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">Emergency Line</div>
-                    <a href="tel:5107895001" className="font-display text-2xl text-gold-gradient">510-789-5001</a>
+                    <a href="tel:5108905792" className="font-display text-2xl text-gold-gradient">510-890-5792</a>
                   </div>
                 </li>
                 <li className="flex items-start gap-4">
@@ -87,7 +87,7 @@ function Page() {
               <div className="glass-dark rounded-sm p-12 text-center">
                 <CheckCircle2 className="h-14 w-14 text-[color:var(--gold-bright)] mx-auto" />
                 <h3 className="mt-5 font-display text-3xl text-gold-gradient">Request Received.</h3>
-                <p className="mt-3 text-muted-foreground">A MYTRN coordinator will be in touch shortly. For active emergencies, please call 510-789-5001 now.</p>
+                <p className="mt-3 text-muted-foreground">A MYTRN coordinator will be in touch shortly. For active emergencies, please call 510-890-5792 now.</p>
               </div>
             ) : (
               <form onSubmit={onSubmit} className="glass-dark rounded-sm p-8 space-y-5">

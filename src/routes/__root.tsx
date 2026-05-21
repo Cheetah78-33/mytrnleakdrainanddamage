@@ -73,7 +73,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "MYTRN Leak, Drain & Damage Response Co. | Bay Area" },
-      { name: "description", content: "Luxury leak response, drain backup cleanup, and damage repair across the Bay Area. Licensed General B Contractor #1154968. Call 510-789-5001." },
+      { name: "description", content: "Luxury leak response, drain backup cleanup, and damage repair across the Bay Area. Licensed General B Contractor #1154968. Call 510-890-5792." },
       { name: "author", content: "MYTRN Leak, Drain & Damage Response Co." },
       { property: "og:title", content: "MYTRN Leak, Drain & Damage Response Co." },
       { property: "og:description", content: "Sit Back & Relax — It's MYTRN to Fix the Damage. Emergency leak, drain, and damage response." },

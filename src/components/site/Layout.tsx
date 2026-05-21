@@ -52,8 +52,8 @@ export function SiteLayout({ children }: { children: ReactNode }) {
               );
             })}
           </nav>
-          <a href="tel:5107895001" className="hidden md:inline-flex items-center gap-2 px-4 py-2 border border-gold text-[color:var(--gold-bright)] text-xs uppercase tracking-[0.2em] hover:bg-[hsl(45_60%_55%/0.1)] hover:glow-gold-sm transition-all">
-            <Phone className="h-3.5 w-3.5" /> 510-789-5001
+          <a href="tel:5108905792" className="hidden md:inline-flex items-center gap-2 px-4 py-2 border border-gold text-[color:var(--gold-bright)] text-xs uppercase tracking-[0.2em] hover:bg-[hsl(45_60%_55%/0.1)] hover:glow-gold-sm transition-all">
+            <Phone className="h-3.5 w-3.5" /> 510-890-5792
           </a>
           <button className="lg:hidden text-[color:var(--gold-bright)]" onClick={() => setOpen(!open)} aria-label="Menu">
             {open ? <X /> : <Menu />}
@@ -65,8 +65,8 @@ export function SiteLayout({ children }: { children: ReactNode }) {
               {NAV.map((n) => (
                 <Link key={n.to} to={n.to as any} className="py-2 text-sm uppercase tracking-[0.18em] text-muted-foreground hover:text-[color:var(--gold-bright)]">{n.label}</Link>
               ))}
-              <a href="tel:5107895001" className="mt-3 inline-flex items-center justify-center gap-2 bg-gold-gradient text-black px-4 py-3 text-xs uppercase tracking-[0.2em] font-semibold">
-                <Phone className="h-4 w-4" /> Call 510-789-5001
+              <a href="tel:5108905792" className="mt-3 inline-flex items-center justify-center gap-2 bg-gold-gradient text-black px-4 py-3 text-xs uppercase tracking-[0.2em] font-semibold">
+                <Phone className="h-4 w-4" /> Call 510-890-5792
               </a>
             </nav>
           </div>
@@ -77,7 +77,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
 
       <Footer />
 
-      <a href="tel:5107895001" className="fixed bottom-6 right-6 z-40 inline-flex items-center gap-2 bg-gold-gradient text-black px-5 py-4 rounded-full font-semibold text-xs uppercase tracking-[0.2em] pulse-gold glow-gold">
+      <a href="tel:5108905792" className="fixed bottom-6 right-6 z-40 inline-flex items-center gap-2 bg-gold-gradient text-black px-5 py-4 rounded-full font-semibold text-xs uppercase tracking-[0.2em] pulse-gold glow-gold">
         <Phone className="h-4 w-4" /> Emergency
       </a>
     </div>
@@ -110,7 +110,7 @@ function Footer() {
         <div>
           <h4 className="text-gold-gradient text-sm uppercase tracking-[0.22em] mb-4">Contact</h4>
           <ul className="space-y-2 text-sm text-muted-foreground">
-            <li><a href="tel:5107895001" className="hover:text-[color:var(--gold-bright)]">📞 510-789-5001</a></li>
+            <li><a href="tel:5108905792" className="hover:text-[color:var(--gold-bright)]">📞 510-890-5792</a></li>
             <li>📍 Bay Area, California</li>
             <li>✉ Mytrnentr@gmail.com</li>
           </ul>
