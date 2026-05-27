@@ -75,11 +75,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "MYTRN Leak, Drain & Damage Response Co. | Bay Area" },
       { name: "description", content: "Luxury leak response, drain backup cleanup, and damage repair across the Bay Area. Licensed General B Contractor #1154968. Call 510-890-5792." },
       { name: "author", content: "MYTRN Leak, Drain & Damage Response Co." },
-      { property: "og:title", content: "MYTRN Leak, Drain & Damage Response Co." },
-      { property: "og:description", content: "Sit Back & Relax — It's MYTRN to Fix the Damage. Emergency leak, drain, and damage response." },
+      { property: "og:title", content: "MYTRN Leak, Drain & Damage Response Co. | Bay Area" },
+      { property: "og:description", content: "Luxury leak response, drain backup cleanup, and damage repair across the Bay Area. Licensed General B Contractor #1154968. Call 510-890-5792." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "MYTRN Leak, Drain & Damage Response Co. | Bay Area" },
+      { name: "twitter:description", content: "Luxury leak response, drain backup cleanup, and damage repair across the Bay Area. Licensed General B Contractor #1154968. Call 510-890-5792." },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/Ss6uHgFDuFNE36D4Z5H9exbA0663/social-images/social-1779842339783-IMG_5447.webp" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/Ss6uHgFDuFNE36D4Z5H9exbA0663/social-images/social-1779842339783-IMG_5447.webp" },
     ],
     links: [
       {
