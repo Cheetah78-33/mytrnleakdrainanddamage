@@ -13,6 +13,13 @@ import workVanity from "@/assets/work-vanity.jpg";
 import workShower from "@/assets/work-shower.jpg";
 import workBathroom from "@/assets/work-bathroom.jpg";
 import workDrain from "@/assets/work-drain.jpg";
+import workCeiling from "@/assets/work-ceiling.jpg";
+import workShowerTile from "@/assets/work-shower-tile.jpg";
+import workExterior from "@/assets/work-exterior.jpg";
+import workPowder from "@/assets/work-powder.jpg";
+import workEpoxy from "@/assets/work-epoxy.jpg";
+import workCorridor from "@/assets/work-corridor.jpg";
+import workCommercialKitchen from "@/assets/work-commercial-kitchen.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({ meta: [
@@ -219,8 +226,13 @@ function Home() {
               { t: "Vanity & Cabinetry", i: workVanity },
               { t: "Drain Backup Response", i: workDrain },
               { t: "Finish Carpentry", i: workBathroom },
-              { t: "Tile & Shower Repair", i: workShower },
-              { t: "Commercial Drain Cleanup", i: workDrain },
+              { t: "Tile & Shower Repair", i: workShowerTile },
+              { t: "Ceiling Leak Repair", i: workCeiling },
+              { t: "Powder Room Restoration", i: workPowder },
+              { t: "Exterior & Property Repair", i: workExterior },
+              { t: "Commercial Epoxy Flooring", i: workEpoxy },
+              { t: "Commercial Corridor Repair", i: workCorridor },
+              { t: "Commercial Kitchen Rebuild", i: workCommercialKitchen },
             ].map((c) => (
               <div key={c.t} className="group relative min-w-[300px] md:min-w-[380px] aspect-[3/4] snap-start overflow-hidden rounded-sm border border-gold cursor-pointer">
                 <img src={c.i} alt={c.t} className="h-full w-full object-cover transition-transform duration-[1500ms] group-hover:scale-110" />
@@ -233,6 +245,24 @@ function Home() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* VIDEO SHOWCASE */}
+      <section className="relative py-24 border-t border-gold">
+        <div className="mx-auto max-w-5xl px-5">
+          <SectionHeading eyebrow="On the Job" title="See MYTRN in Action" />
+          <Reveal>
+            <div className="relative overflow-hidden rounded-sm border border-gold aspect-video">
+              <video
+                src="/videos/work-video.mp4"
+                controls
+                playsInline
+                preload="metadata"
+                className="h-full w-full object-cover"
+              />
+            </div>
+          </Reveal>
         </div>
       </section>
 
