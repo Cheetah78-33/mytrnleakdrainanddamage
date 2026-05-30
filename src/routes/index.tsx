@@ -84,7 +84,7 @@ function Home() {
             </Reveal>
             <Reveal delay={120}>
               <h1 className="font-display text-5xl md:text-7xl lg:text-8xl leading-[1.02]">
-                <span className="text-gold-gradient">Sit Back & Relax —</span>
+                <span className="text-gold-gradient">Sit Back & Relax</span>
                 <br />
                 <span className="text-white/95">It's MYTRN to</span>
                 <br />
