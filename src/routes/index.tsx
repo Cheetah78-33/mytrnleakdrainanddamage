@@ -80,7 +80,7 @@ function Home() {
         <div className="mx-auto max-w-7xl px-5 py-32 md:py-44">
           <div className="max-w-4xl mx-auto text-center">
             <Reveal>
-              <Eyebrow>Bay Area · Residential & Commercial</Eyebrow>
+              <Eyebrow>Bay Area Residential & Commercial</Eyebrow>
             </Reveal>
             <Reveal delay={120}>
               <h1 className="font-display text-5xl md:text-7xl lg:text-8xl leading-[1.02]">
