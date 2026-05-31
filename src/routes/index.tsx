@@ -168,6 +168,28 @@ function Home() {
         </div>
        </Reveal>
       ))}
+       <Reveal delay={240}>
+        <div className="grid md:grid-cols-2 gap-6">
+         <div className="relative overflow-hidden rounded-sm border border-gold aspect-[4/5]">
+          <video
+           src="/videos/before-after-shower.mov"
+           controls
+           playsInline
+           preload="metadata"
+           className="h-full w-full object-cover"
+          />
+          <div className="absolute top-4 left-4 bg-black/70 px-3 py-1 text-[10px] uppercase tracking-[0.28em] text-[color:var(--gold-bright)] border border-gold">Before</div>
+         </div>
+         <div className="relative overflow-hidden rounded-sm border border-gold aspect-[4/5]">
+          <img src={afterShower} alt="Shower remodel after" className="h-full w-full object-cover" />
+          <div className="absolute top-4 left-4 bg-gold-gradient px-3 py-1 text-[10px] uppercase tracking-[0.28em] text-black font-semibold">After</div>
+         </div>
+         <div className="md:col-span-2">
+          <h3 className="font-display text-3xl text-gold-gradient">Luxury Shower Remodel</h3>
+          <p className="mt-2 text-muted-foreground">Full walkthrough of the original space, transformed into a modern tiled shower with custom glass enclosure and fixtures.</p>
+         </div>
+        </div>
+       </Reveal>
      </div>
     </div>
    </section>
