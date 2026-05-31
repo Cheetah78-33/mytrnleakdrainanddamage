@@ -31,6 +31,12 @@ function Page() {
   <SiteLayout>
    <PageHero eyebrow="About" title="Built Around Response, Repair & Reliability" image={valve} />
 
+      <section className="py-12">
+        <div className="mx-auto max-w-4xl px-5 text-center">
+          <p className="font-display italic text-2xl md:text-3xl text-gold-gradient">Our mission is to remove your problems.</p>
+        </div>
+      </section>
+
    <section className="py-24">
     <div className="mx-auto max-w-5xl px-5">
      <SectionHeading eyebrow="Our Story" title="A Family Business that solves your problems" />
