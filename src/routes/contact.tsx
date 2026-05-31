@@ -78,7 +78,7 @@ function Page() {
               </ul>
               <div className="gold-divider my-7" />
               <div className="text-xs uppercase tracking-[0.22em] text-muted-foreground mb-2">Credentials</div>
-              <div className="text-sm text-white/90">Licensed General B Contractor · License No. 1154968 · Licensed & Bonded</div>
+              <div className="text-sm text-white/90">Licensed General B Contractor · License No. 1154968 · LICENSED, BONDED, INSURED</div>
             </div>
           </Reveal>
 

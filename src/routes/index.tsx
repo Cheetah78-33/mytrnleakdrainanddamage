@@ -109,7 +109,7 @@ function Home() {
                   "Licensed General B · Lic. #1154968",
                   "Residential & Commercial",
                   "Emergency Response",
-                  "Licensed & Bonded",
+                  "LICENSED, BONDED, INSURED",
                   "Fast Response",
                 ].map((t) => (
                   <span key={t} className="inline-flex items-center gap-2"><ShieldCheck className="h-3.5 w-3.5 text-[color:var(--gold-bright)]" /> {t}</span>
@@ -128,7 +128,7 @@ function Home() {
             { n: 10, s: "+", l: "Years Industry Experience" },
             { n: 300, s: "+", l: "Completed Projects" },
             { n: 24, s: "/7", l: "Emergency Response" },
-            { n: 100, s: "%", l: "Licensed & Bonded" },
+            { n: 100, s: "%", l: "LICENSED, BONDED, INSURED" },
           ].map((x, i) => (
             <Reveal key={i} delay={i * 100}>
               <div className="glass-dark p-8 text-center rounded-sm transition-all duration-500 hover:-translate-y-1">
@@ -292,7 +292,7 @@ function Home() {
         <div className="mx-auto max-w-7xl px-5 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
           {[
             { i: Award, t: "Licensed General B", s: "Lic. #1154968" },
-            { i: ShieldCheck, t: "Licensed & Bonded", s: "Insured Work" },
+            { i: ShieldCheck, t: "LICENSED, BONDED, INSURED", s: "Insured Work" },
             { i: Clock, t: "Emergency Response", s: "Same-Day Arrival" },
             { i: Building2, t: "Residential & Commercial", s: "Bay Area Coverage" },
           ].map((x) => (

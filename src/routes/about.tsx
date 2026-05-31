@@ -10,14 +10,14 @@ import valve from "@/assets/valve.jpg";
 export const Route = createFileRoute("/about")({
   head: () => ({ meta: [
     { title: "About — MYTRN Leak, Drain & Damage Response Co." },
-    { name: "description", content: "Built around response, repair and reliability. A family business with industry experience and a property-first mindset." },
+    { name: "description", content: "Built around response, repair and reliability. A family business that solves your problems." },
   ]}),
   component: Page,
 });
 
 const creds = [
   { i: Award, t: "Licensed General B Contractor", s: "License No. 1154968" },
-  { i: ShieldCheck, t: "Licensed & Bonded", s: "Fully Insured Work" },
+  { i: ShieldCheck, t: "LICENSED, BONDED, INSURED", s: "Fully Insured Work" },
   { i: Building2, t: "Residential & Commercial", s: "Bay Area Coverage" },
   { i: Users, t: "Multi-Trade Coordination", s: "Single Point of Contact" },
 ];
@@ -33,10 +33,10 @@ function Page() {
 
       <section className="py-24">
         <div className="mx-auto max-w-5xl px-5">
-          <SectionHeading eyebrow="Our Story" title="A Family Business with a Property-First Mindset" />
+          <SectionHeading eyebrow="Our Story" title="A Family Business that solves your problems" />
           <Reveal>
             <p className="text-muted-foreground leading-relaxed text-lg">
-              MYTRN was founded out of years of hands-on industry experience watching damage events go from bad to worse because no one took ownership of the full picture. We built a different kind of response company — one that arrives quickly, communicates clearly, and stays with the property from the first containment through the final coat of paint. We treat every home and business like our own.
+              MYTRN was founded out of years of hands-on industry experience watching damage events, making it so our job would be to solve your problems. We built a different kind of response company — one that arrives quickly, communicates clearly, and stays with the property from the first containment through the final coat of paint. We treat every home and business like our own.
             </p>
           </Reveal>
         </div>
@@ -44,7 +44,7 @@ function Page() {
 
       <section className="py-24 border-t border-gold">
         <div className="mx-auto max-w-7xl px-5">
-          <SectionHeading eyebrow="Credentials" title="Licensed, Bonded & Coordinated" />
+          <SectionHeading eyebrow="Credentials" title="Licensed, Bonded & Insured" />
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {creds.map((c, i) => (
               <Reveal key={c.t} delay={i * 80}>
