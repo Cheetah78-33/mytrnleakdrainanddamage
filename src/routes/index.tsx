@@ -20,6 +20,13 @@ import workPowder from "@/assets/work-powder.jpg";
 import workEpoxy from "@/assets/work-epoxy.jpg";
 import workCorridor from "@/assets/work-corridor.jpg";
 import workCommercialKitchen from "@/assets/work-commercial-kitchen.jpg";
+import beforeDoor from "@/assets/before-door.jpg";
+import afterDoor from "@/assets/after-door.jpg";
+import beforeCeiling from "@/assets/before-ceiling.jpg";
+import afterCeiling from "@/assets/after-ceiling.jpg";
+import beforeBathroom from "@/assets/before-bathroom.jpg";
+import afterBathroom from "@/assets/after-bathroom.jpg";
+import workPatio from "@/assets/work-patio.jpg";
 
 export const Route = createFileRoute("/")({
  head: () => ({ meta: [
@@ -94,6 +101,11 @@ function Home() {
       <Reveal delay={260}>
        <p className="mt-8 text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
         Water Leaks · Drain Backups · Sewer Backup Cleanup · Damage Repair · Remodels · Home Repair
+       </p>
+      </Reveal>
+      <Reveal delay={320}>
+       <p className="mt-4 font-display italic text-xl md:text-2xl text-gold-gradient">
+        Our mission is to remove your problems.
        </p>
       </Reveal>
       <Reveal delay={380}>
@@ -233,6 +245,7 @@ function Home() {
        { t: "Commercial Epoxy Flooring", i: workEpoxy },
        { t: "Commercial Corridor Repair", i: workCorridor },
        { t: "Commercial Kitchen Rebuild", i: workCommercialKitchen },
+       { t: "Patio & Stonework", i: workPatio },
       ].map((c) => (
        <div key={c.t} className="group relative min-w-[300px] md:min-w-[380px] aspect-[3/4] snap-start overflow-hidden rounded-sm border border-gold cursor-pointer">
         <img src={c.i} alt={c.t} className="h-full w-full object-cover transition-transform duration-[1500ms] group-hover:scale-110" />
