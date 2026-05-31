@@ -94,6 +94,7 @@ function Footer() {
      <p className="text-sm text-muted-foreground leading-relaxed">
       Bay Area's luxury leak, drain & damage response. Built on response, repair, and reliability.
      </p>
+      <p className="text-sm italic text-[color:var(--gold-bright)]">Our mission is to remove your problems.</p>
     </div>
     <div>
      <h4 className="text-gold-gradient text-sm uppercase tracking-[0.22em] mb-4">Navigate</h4>
