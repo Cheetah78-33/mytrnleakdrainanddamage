@@ -115,7 +115,7 @@ function Footer() {
             <li>✉ Mytrnentr@gmail.com</li>
           </ul>
           <div className="mt-5 inline-flex flex-col gap-1 border border-gold px-4 py-3 text-[11px] uppercase tracking-[0.18em] text-[color:var(--gold-bright)]">
-            <span>Licensed & Bonded</span>
+            <span>LICENSED, BONDED, INSURED</span>
             <span>General B Contractor</span>
             <span>License No. 1154968</span>
           </div>
