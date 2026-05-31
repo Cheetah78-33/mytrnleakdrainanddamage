@@ -79,7 +79,7 @@ function Home() {
    {/* HERO */}
    <section className="relative isolate overflow-hidden">
     <div className="absolute inset-0 -z-10">
-     <img src={heroBg} alt="" className="absolute inset-0 h-full w-full object-cover object-center" />
+     <img src={heroBg} alt="" className="absolute inset-0 h-full w-full object-cover object-center scale-95" />
      <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-black/20 to-transparent" />
      <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-background" />
      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(212,175,55,0.12),transparent_65%)]" />
@@ -111,7 +111,7 @@ function Home() {
       </Reveal>
       <Reveal delay={380}>
        <div className="mt-10 flex flex-wrap gap-4 justify-center">
-        <GoldLink href="tel:5108905792"><Phone className="h-4 w-4" /> Get Emergency Help</GoldLink>
+        <GoldLink href="tel:5108905790"><Phone className="h-4 w-4" /> Get Emergency Help</GoldLink>
         <GoldLink to="/contact" variant="outline">Request Inspection</GoldLink>
         <GoldLink to="/services" variant="outline">View Services <ChevronRight className="h-4 w-4" /></GoldLink>
        </div>
