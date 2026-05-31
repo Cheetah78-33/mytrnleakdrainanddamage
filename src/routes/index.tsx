@@ -263,6 +263,33 @@ function Home() {
 
    {/* VIDEO SHOWCASE */}
    <section className="relative py-24 border-t border-gold">
+    <div className="mx-auto max-w-7xl px-5 mb-24">
+     <SectionHeading eyebrow="Before & After" title="Real Results, Real Properties" subtitle="Every project, taken from damaged to delivered by the MYTRN team." />
+     <div className="space-y-16">
+      {[
+       { t: "Exterior Door Restoration", b: beforeDoor, a: afterDoor, d: "Rotted, water-damaged French door rebuilt and refinished to original spec." },
+       { t: "Structural Ceiling & Framing Repair", b: beforeCeiling, a: afterCeiling, d: "Water-damaged framing demoed, dried, and replaced with new clean lumber." },
+       { t: "Powder Room Rebuild", b: beforeBathroom, a: afterBathroom, d: "Stripped walls and prep work taken through finish, paint, and fixture install." },
+      ].map((p, i) => (
+       <Reveal key={p.t} delay={i * 80}>
+        <div className="grid md:grid-cols-2 gap-6">
+         <div className="relative overflow-hidden rounded-sm border border-gold aspect-[4/5]">
+          <img src={p.b} alt={`${p.t} before`} className="h-full w-full object-cover" />
+          <div className="absolute top-4 left-4 bg-black/70 px-3 py-1 text-[10px] uppercase tracking-[0.28em] text-[color:var(--gold-bright)] border border-gold">Before</div>
+         </div>
+         <div className="relative overflow-hidden rounded-sm border border-gold aspect-[4/5]">
+          <img src={p.a} alt={`${p.t} after`} className="h-full w-full object-cover" />
+          <div className="absolute top-4 left-4 bg-gold-gradient px-3 py-1 text-[10px] uppercase tracking-[0.28em] text-black font-semibold">After</div>
+         </div>
+         <div className="md:col-span-2">
+          <h3 className="font-display text-3xl text-gold-gradient">{p.t}</h3>
+          <p className="mt-2 text-muted-foreground">{p.d}</p>
+         </div>
+        </div>
+       </Reveal>
+      ))}
+     </div>
+    </div>
     <div className="mx-auto max-w-5xl px-5">
      <SectionHeading eyebrow="On the Job" title="See MYTRN in Action" />
      <Reveal>
