@@ -1,10 +1,8 @@
 import type { ReactNode } from "react";
 export function Eyebrow({ children }: { children: ReactNode }) {
   return (
-    <div className="inline-flex items-center gap-3 mb-5">
-      <span className="h-px w-10 bg-gold-gradient" />
+    <div className="inline-flex items-center mb-5">
       <span className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--gold-bright)]">{children}</span>
-      <span className="h-px w-10 bg-gold-gradient" />
     </div>
   );
 }
