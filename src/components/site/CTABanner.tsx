@@ -13,7 +13,7 @@ export function CTABanner({ title = "Damage Doesn't Wait. Neither Do We.", sub =
             <h3 className="font-display text-4xl md:text-5xl text-gold-gradient">{title}</h3>
             <p className="mt-5 text-muted-foreground max-w-2xl mx-auto whitespace-pre-line">{sub}</p>
             <div className="mt-9 flex flex-wrap gap-4 justify-center">
-              <GoldLink href="tel:5108905792"><Phone className="h-4 w-4" /> Call 510-890-5792</GoldLink>
+              <GoldLink href="tel:5108905790"><Phone className="h-4 w-4" /> Call 510-890-5790</GoldLink>
               <GoldLink to="/contact" variant="outline">Request Inspection</GoldLink>
               <GoldLink to="/water-response" variant="outline">Emergency Response</GoldLink>
             </div>
