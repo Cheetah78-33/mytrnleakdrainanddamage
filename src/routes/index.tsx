@@ -27,6 +27,7 @@ import afterCeiling from "@/assets/after-ceiling.jpg";
 import beforeBathroom from "@/assets/before-bathroom.jpg";
 import afterBathroom from "@/assets/after-bathroom.jpg";
 import workPatio from "@/assets/work-patio.jpg";
+import afterShower from "@/assets/after-shower.jpg";
 
 export const Route = createFileRoute("/")({
  head: () => ({ meta: [
