@@ -56,6 +56,17 @@ function Page() {
     </div>
    </section>
 
+   <section className="py-24 border-t border-gold">
+    <div className="mx-auto max-w-6xl px-5">
+     <SectionHeading eyebrow="Featured Project" title="Exterior & Stonework" subtitle="Restored patio with custom balustrade work for a commercial property." />
+     <Reveal>
+      <div className="relative aspect-[16/10] overflow-hidden rounded-sm border border-gold">
+       <img src={patio.url} alt="Commercial patio and balustrade" className="h-full w-full object-cover" />
+      </div>
+     </Reveal>
+    </div>
+   </section>
+
    <CTABanner title="Protect Your Property & Operations" sub="Discreet, fast, and finished to a commercial standard." />
   </SiteLayout>
  );
