@@ -6,9 +6,10 @@ import { CTABanner } from "@/components/site/CTABanner";
 import { Reveal } from "@/components/site/Reveal";
 import { useRef, useState } from "react";
 import { Sparkles } from "lucide-react";
-import valve from "@/assets/valve.jpg";
 import toilet from "@/assets/toilet.jpg";
 import ducts from "@/assets/ducts.jpg";
+import remodelBefore from "@/assets/remodel-before.png.asset.json";
+import remodelAfter from "@/assets/remodel-after.png.asset.json";
 
 export const Route = createFileRoute("/remodels")({
  head: () => ({ meta: [
@@ -69,7 +70,7 @@ function Page() {
    <section className="py-24 border-t border-gold">
     <div className="mx-auto max-w-5xl px-5">
      <SectionHeading eyebrow="Before & After" title="Drag to Reveal the Rebuild" />
-     <BeforeAfter before={ducts} after={valve} />
+     <BeforeAfter before={remodelBefore.url} after={remodelAfter.url} />
     </div>
    </section>
 

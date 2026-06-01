@@ -8,6 +8,9 @@ import { Hammer } from "lucide-react";
 import ducts from "@/assets/ducts.jpg";
 import valve from "@/assets/valve.jpg";
 import toilet from "@/assets/toilet.jpg";
+import repairDoors from "@/assets/repair-doors.png.asset.json";
+import repairToilet from "@/assets/repair-toilet.png.asset.json";
+import repairFraming from "@/assets/repair-framing.png.asset.json";
 
 export const Route = createFileRoute("/repairs")({
  head: () => ({ meta: [
@@ -18,7 +21,7 @@ export const Route = createFileRoute("/repairs")({
 });
 
 const grid = ["Drywall","Texture","Paint","Trim","Baseboards","Flooring","Cabinets","Doors","Ceiling Repair"];
-const gallery = [ducts, valve, toilet, valve, toilet, ducts];
+const gallery = [ducts, valve, toilet, repairDoors.url, repairToilet.url, repairFraming.url];
 
 function Page() {
  return (

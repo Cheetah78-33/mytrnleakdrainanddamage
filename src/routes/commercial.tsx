@@ -6,6 +6,7 @@ import { CTABanner } from "@/components/site/CTABanner";
 import { Reveal } from "@/components/site/Reveal";
 import { Building2, Wrench } from "lucide-react";
 import ducts from "@/assets/ducts.jpg";
+import patio from "@/assets/commercial-patio.png.asset.json";
 
 export const Route = createFileRoute("/commercial")({
  head: () => ({ meta: [
@@ -52,6 +53,17 @@ function Page() {
        </Reveal>
       ))}
      </div>
+    </div>
+   </section>
+
+   <section className="py-24 border-t border-gold">
+    <div className="mx-auto max-w-6xl px-5">
+     <SectionHeading eyebrow="Featured Project" title="Exterior & Stonework" subtitle="Restored patio with custom balustrade work for a commercial property." />
+     <Reveal>
+      <div className="relative aspect-[16/10] overflow-hidden rounded-sm border border-gold">
+       <img src={patio.url} alt="Commercial patio and balustrade" className="h-full w-full object-cover" />
+      </div>
+     </Reveal>
     </div>
    </section>
 

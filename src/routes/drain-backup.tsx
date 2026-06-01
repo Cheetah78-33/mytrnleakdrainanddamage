@@ -6,8 +6,8 @@ import { CTABanner } from "@/components/site/CTABanner";
 import { Reveal } from "@/components/site/Reveal";
 import { Waves } from "lucide-react";
 import toilet from "@/assets/toilet.jpg";
-import valve from "@/assets/valve.jpg";
 import ducts from "@/assets/ducts.jpg";
+import drainPump from "@/assets/drain-pump.jpg.asset.json";
 
 export const Route = createFileRoute("/drain-backup")({
  head: () => ({ meta: [
@@ -51,7 +51,7 @@ function Page() {
    <section className="py-24 border-t border-gold">
     <div className="mx-auto max-w-7xl px-5 grid lg:grid-cols-2 gap-12 items-center">
      <div className="relative aspect-[4/5] overflow-hidden rounded-sm border border-gold">
-      <img src={valve} alt="Commercial kitchen drain backup response" className="h-full w-full object-cover" />
+      <img src={drainPump.url} alt="Commercial kitchen drain backup response" className="h-full w-full object-cover" />
       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
      </div>
      <Reveal>
