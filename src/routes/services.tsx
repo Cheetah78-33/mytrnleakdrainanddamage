@@ -7,8 +7,10 @@ import { Reveal } from "@/components/site/Reveal";
 import { useState } from "react";
 import { ChevronDown, Droplet, Hammer, Sparkles, Building2 } from "lucide-react";
 import valve from "@/assets/valve.jpg";
-import toilet from "@/assets/toilet.jpg";
-import ducts from "@/assets/ducts.jpg";
+import bathroomRebuild from "@/assets/remodel-after.png.asset.json";
+import kitchenRestoration from "@/assets/water-after.png.asset.json";
+import tenantImprovements from "@/assets/repair-doors.png.asset.json";
+import interiorUpgrades from "@/assets/repair-toilet.png.asset.json";
 
 export const Route = createFileRoute("/services")({
  head: () => ({ meta: [
@@ -86,7 +88,7 @@ function Services() {
     <div className="mx-auto max-w-7xl px-5">
      <SectionHeading eyebrow="Remodel & Rebuild" title="Turn Damage Into a Full Upgrade." />
      <div className="grid md:grid-cols-2 gap-6">
-      {[{i: toilet, t: "Bathroom Rebuild"},{i: valve, t: "Kitchen Restoration"},{i: ducts, t: "Tenant Improvements"},{i: toilet, t: "Interior Upgrades"}].map((x) => (
+      {[{i: bathroomRebuild.url, t: "Bathroom Rebuild"},{i: kitchenRestoration.url, t: "Kitchen Restoration"},{i: tenantImprovements.url, t: "Tenant Improvements"},{i: interiorUpgrades.url, t: "Interior Upgrades"}].map((x) => (
        <div key={x.t} className="group relative aspect-[16/10] overflow-hidden rounded-sm border border-gold">
         <img src={x.i} alt={x.t} className="h-full w-full object-cover transition-transform duration-[2000ms] group-hover:scale-110" />
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
