@@ -313,7 +313,7 @@ function Home() {
      <Reveal>
       <div className="relative overflow-hidden rounded-sm border border-gold aspect-video">
        <video
-        src="/videos/work-video.mp4"
+        src="/videos/work-video.mov"
         controls
         playsInline
         preload="metadata"
