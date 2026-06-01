@@ -6,6 +6,7 @@ import { CTABanner } from "@/components/site/CTABanner";
 import { Reveal } from "@/components/site/Reveal";
 import { Building2, Wrench } from "lucide-react";
 import ducts from "@/assets/ducts.jpg";
+import patio from "@/assets/commercial-patio.png.asset.json";
 
 export const Route = createFileRoute("/commercial")({
  head: () => ({ meta: [
