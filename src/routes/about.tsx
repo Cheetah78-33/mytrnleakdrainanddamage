@@ -71,7 +71,7 @@ function Page() {
       <div className="glass-dark border-gold rounded-sm p-10 text-center">
        <div className="text-[11px] uppercase tracking-[0.3em] text-[color:var(--gold-bright)] mb-4">Important Notice</div>
        <blockquote className="font-display text-2xl md:text-3xl text-gold-gradient italic leading-relaxed">
-        "Specialty trade work performed by properly licensed contractors when required."
+        "Specialty Trade Work Performed By Properly Licensed Contractors."
        </blockquote>
       </div>
      </Reveal>
