@@ -6,8 +6,8 @@ import { CTABanner } from "@/components/site/CTABanner";
 import { Reveal } from "@/components/site/Reveal";
 import { Droplet } from "lucide-react";
 import valve from "@/assets/valve.jpg";
-import toilet from "@/assets/toilet.jpg";
-import ducts from "@/assets/ducts.jpg";
+import waterBefore from "@/assets/water-before.png.asset.json";
+import waterAfter from "@/assets/water-after.png.asset.json";
 
 export const Route = createFileRoute("/water-response")({
  head: () => ({ meta: [
@@ -52,7 +52,7 @@ function Page() {
     <div className="mx-auto max-w-7xl px-5">
      <SectionHeading eyebrow="Before & After" title="The MYTRN Standard" subtitle="From containment to a finished, photo-ready rebuild." />
      <div className="grid md:grid-cols-2 gap-6">
-      {[{i: ducts, t: "Before"}, {i: toilet, t: "After"}].map((x) => (
+      {[{i: waterBefore.url, t: "Before"}, {i: waterAfter.url, t: "After"}].map((x) => (
        <div key={x.t} className="relative aspect-[4/3] overflow-hidden rounded-sm border border-gold group">
         <img src={x.i} alt={x.t} className="h-full w-full object-cover transition-transform duration-[1800ms] group-hover:scale-105" />
         <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent" />
