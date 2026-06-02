@@ -6,11 +6,12 @@ import { CTABanner } from "@/components/site/CTABanner";
 import { Reveal } from "@/components/site/Reveal";
 import { Hammer } from "lucide-react";
 import ducts from "@/assets/ducts.jpg";
-import valve from "@/assets/valve.jpg";
-import toilet from "@/assets/toilet.jpg";
-import repairDoors from "@/assets/repair-doors.png.asset.json";
-import repairToilet from "@/assets/repair-toilet.png.asset.json";
-import repairFraming from "@/assets/repair-framing.png.asset.json";
+import repairGallery1 from "@/assets/repair-gallery-1.png.asset.json";
+import repairGallery2 from "@/assets/repair-gallery-2.png.asset.json";
+import repairGallery3 from "@/assets/repair-gallery-3.png.asset.json";
+import repairGallery4 from "@/assets/repair-gallery-4.png.asset.json";
+import repairGallery5 from "@/assets/repair-gallery-5.png.asset.json";
+import repairGallery6 from "@/assets/repair-gallery-6.png.asset.json";
 
 export const Route = createFileRoute("/repairs")({
  head: () => ({ meta: [
@@ -21,7 +22,7 @@ export const Route = createFileRoute("/repairs")({
 });
 
 const grid = ["Drywall","Texture","Paint","Trim","Baseboards","Flooring","Cabinets","Doors","Ceiling Repair"];
-const gallery = [ducts, valve, toilet, repairDoors.url, repairToilet.url, repairFraming.url];
+const gallery = [repairGallery1.url, repairGallery2.url, repairGallery3.url, repairGallery4.url, repairGallery5.url, repairGallery6.url];
 
 function Page() {
  return (
