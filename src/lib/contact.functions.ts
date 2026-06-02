@@ -56,7 +56,6 @@ export const submitContactRequest = createServerFn({ method: "POST" })
         to: [EMAIL_TO],
         subject: `New contact form submission from ${data.name}`,
         html: emailHtml,
-        reply_to: data.phone,
       }),
     });
 
