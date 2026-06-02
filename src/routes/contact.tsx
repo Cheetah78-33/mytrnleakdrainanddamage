@@ -1,11 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { SiteLayout } from "@/components/site/Layout";
 import { PageHero } from "@/components/site/PageHero";
 import { Reveal } from "@/components/site/Reveal";
 import { GoldButton } from "@/components/site/GoldButton";
+import { contactFormSchema, submitContactRequest } from "@/lib/contact.functions";
 import { Phone, MapPin, Mail, Upload, Send, CheckCircle2 } from "lucide-react";
 import { useState } from "react";
-import { z } from "zod";
 import valve from "@/assets/valve.jpg";
 
 export const Route = createFileRoute("/contact")({
@@ -16,31 +17,36 @@ export const Route = createFileRoute("/contact")({
  component: Page,
 });
 
-const schema = z.object({
- name: z.string().trim().min(1, "Required").max(100),
- phone: z.string().trim().min(7, "Valid phone required").max(20),
- property: z.string().min(1, "Select one"),
- issue: z.string().min(1, "Select one"),
- message: z.string().trim().max(1000).optional(),
-});
-
 function Page() {
  const [done, setDone] = useState(false);
  const [errors, setErrors] = useState<Record<string,string>>({});
+ const [submitError, setSubmitError] = useState("");
+ const [submitting, setSubmitting] = useState(false);
+ const submitRequest = useServerFn(submitContactRequest);
 
- const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+ const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   e.preventDefault();
   const fd = new FormData(e.currentTarget);
   const data = Object.fromEntries(fd.entries());
-  const r = schema.safeParse(data);
+  const r = contactFormSchema.safeParse(data);
   if (!r.success) {
    const errs: Record<string,string> = {};
    r.error.issues.forEach((i) => { errs[i.path[0] as string] = i.message; });
    setErrors(errs);
+   setSubmitError("");
    return;
   }
-  setErrors({});
-  setDone(true);
+  try {
+   setSubmitting(true);
+   setSubmitError("");
+   setErrors({});
+   await submitRequest({ data: r.data });
+   setDone(true);
+  } catch {
+   setSubmitError("We couldn't send your request right now. Please call 510-890-5790 for immediate help.");
+  } finally {
+   setSubmitting(false);
+  }
  };
 
  return (
@@ -90,7 +96,7 @@ function Page() {
         <p className="mt-3 text-muted-foreground">A MYTRN coordinator will be in touch shortly. For active emergencies, please call 510-890-5790 now.</p>
        </div>
       ) : (
-       <form onSubmit={onSubmit} className="glass-dark rounded-sm p-8 space-y-5">
+        <form onSubmit={onSubmit} className="glass-dark rounded-sm p-8 space-y-5">
         <div className="grid sm:grid-cols-2 gap-5">
          <Field label="Name" name="name" error={errors.name} />
          <Field label="Phone" name="phone" type="tel" error={errors.phone} />
@@ -111,7 +117,8 @@ function Page() {
          <Label>Message</Label>
          <textarea name="message" rows={4} maxLength={1000} className="mt-2 w-full bg-black/50 border border-gold rounded-sm px-4 py-3 text-white placeholder:text-muted-foreground focus:outline-none focus:glow-gold-sm focus:border-[color:var(--gold-bright)] transition" placeholder="Describe what's happening..." />
         </div>
-        <GoldButton type="submit" className="w-full"><Send className="h-4 w-4" /> Send Emergency Request</GoldButton>
+         {submitError && <p className="text-sm text-destructive">{submitError}</p>}
+         <GoldButton type="submit" className="w-full" disabled={submitting}><Send className="h-4 w-4" /> {submitting ? "Sending Request" : "Send Emergency Request"}</GoldButton>
        </form>
       )}
      </Reveal>
