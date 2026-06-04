@@ -13,6 +13,7 @@ export type ContactFormInput = z.infer<typeof contactFormSchema>;
 
 const TWILIO_GATEWAY_URL = "https://connector-gateway.lovable.dev/twilio";
 const SMS_TO = "+15108905790";
+const E164_PHONE_PATTERN = /^\+[1-9]\d{7,14}$/;
 
 function requireEnv(name: string) {
   const value = process.env[name];
@@ -22,12 +23,42 @@ function requireEnv(name: string) {
   return value;
 }
 
+async function getTwilioFromNumber(lovableApiKey: string, twilioApiKey: string) {
+  const configuredFromNumber = process.env.TWILIO_FROM_NUMBER?.trim();
+  if (configuredFromNumber && E164_PHONE_PATTERN.test(configuredFromNumber)) {
+    return configuredFromNumber;
+  }
+
+  const numbersResponse = await fetch(`${TWILIO_GATEWAY_URL}/IncomingPhoneNumbers.json?PageSize=1`, {
+    headers: {
+      Authorization: `Bearer ${lovableApiKey}`,
+      "X-Connection-Api-Key": twilioApiKey,
+    },
+  });
+
+  const responseText = await numbersResponse.text();
+  if (!numbersResponse.ok) {
+    throw new Error(`Could not load messaging sender (${numbersResponse.status}): ${responseText}`);
+  }
+
+  const payload = JSON.parse(responseText) as {
+    incoming_phone_numbers?: Array<{ phone_number?: string; phoneNumber?: string }>;
+  };
+  const accountNumber = payload.incoming_phone_numbers?.[0]?.phone_number ?? payload.incoming_phone_numbers?.[0]?.phoneNumber;
+
+  if (!accountNumber || !E164_PHONE_PATTERN.test(accountNumber)) {
+    throw new Error("No valid messaging sender phone number is available on the connected account.");
+  }
+
+  return accountNumber;
+}
+
 export const submitContactRequest = createServerFn({ method: "POST" })
   .inputValidator((input) => contactFormSchema.parse(input))
   .handler(async ({ data }) => {
     const LOVABLE_API_KEY = requireEnv("LOVABLE_API_KEY");
     const TWILIO_API_KEY = requireEnv("TWILIO_API_KEY");
-    const TWILIO_FROM_NUMBER = requireEnv("TWILIO_FROM_NUMBER");
+    const twilioFromNumber = await getTwilioFromNumber(LOVABLE_API_KEY, TWILIO_API_KEY);
 
     const cleanMessage = data.message?.trim() || "No message provided.";
 
@@ -49,7 +80,7 @@ export const submitContactRequest = createServerFn({ method: "POST" })
       },
       body: new URLSearchParams({
         To: SMS_TO,
-        From: TWILIO_FROM_NUMBER,
+        From: twilioFromNumber,
         Body: smsBody,
       }),
     });
