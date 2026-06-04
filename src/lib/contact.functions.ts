@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
 export const contactFormSchema = z.object({
   name: z.string().trim().min(1, "Required").max(100),
@@ -56,11 +57,19 @@ async function getTwilioFromNumber(lovableApiKey: string, twilioApiKey: string) 
 export const submitContactRequest = createServerFn({ method: "POST" })
   .inputValidator((input) => contactFormSchema.parse(input))
   .handler(async ({ data }) => {
-    const LOVABLE_API_KEY = requireEnv("LOVABLE_API_KEY");
-    const TWILIO_API_KEY = requireEnv("TWILIO_API_KEY");
-    const twilioFromNumber = await getTwilioFromNumber(LOVABLE_API_KEY, TWILIO_API_KEY);
-
     const cleanMessage = data.message?.trim() || "No message provided.";
+
+    const { error: saveError } = await supabaseAdmin.from("contact_messages").insert({
+      name: data.name,
+      phone: data.phone,
+      property: data.property,
+      issue: data.issue,
+      message: cleanMessage,
+    });
+
+    if (saveError) {
+      throw new Error(`Could not save contact request: ${saveError.message}`);
+    }
 
     const smsBody = [
       `MYTRN form submission`,
@@ -71,23 +80,32 @@ export const submitContactRequest = createServerFn({ method: "POST" })
       `Message: ${cleanMessage}`,
     ].join("\n");
 
-    const smsResponse = await fetch(`${TWILIO_GATEWAY_URL}/Messages.json`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
-        "X-Connection-Api-Key": TWILIO_API_KEY,
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: new URLSearchParams({
-        To: SMS_TO,
-        From: twilioFromNumber,
-        Body: smsBody,
-      }),
-    });
+    try {
+      const LOVABLE_API_KEY = process.env.LOVABLE_API_KEY;
+      const TWILIO_API_KEY = process.env.TWILIO_API_KEY;
 
-    if (!smsResponse.ok) {
-      const errorText = await smsResponse.text();
-      throw new Error(`SMS notification failed (${smsResponse.status}): ${errorText}`);
+      if (LOVABLE_API_KEY && TWILIO_API_KEY) {
+        const twilioFromNumber = await getTwilioFromNumber(LOVABLE_API_KEY, TWILIO_API_KEY);
+        const smsResponse = await fetch(`${TWILIO_GATEWAY_URL}/Messages.json`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${LOVABLE_API_KEY}`,
+            "X-Connection-Api-Key": TWILIO_API_KEY,
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: new URLSearchParams({
+            To: SMS_TO,
+            From: twilioFromNumber,
+            Body: smsBody,
+          }),
+        });
+
+        if (!smsResponse.ok) {
+          console.error("SMS notification failed", smsResponse.status, await smsResponse.text());
+        }
+      }
+    } catch (error) {
+      console.error("SMS notification skipped", error);
     }
 
     return { success: true };
