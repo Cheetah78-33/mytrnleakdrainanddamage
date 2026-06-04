@@ -16,14 +16,6 @@ const TWILIO_GATEWAY_URL = "https://connector-gateway.lovable.dev/twilio";
 const SMS_TO = "+15108905790";
 const E164_PHONE_PATTERN = /^\+[1-9]\d{7,14}$/;
 
-function requireEnv(name: string) {
-  const value = process.env[name];
-  if (!value) {
-    throw new Error(`${name} is not configured`);
-  }
-  return value;
-}
-
 async function getTwilioFromNumber(lovableApiKey: string, twilioApiKey: string) {
   const configuredFromNumber = process.env.TWILIO_FROM_NUMBER?.trim();
   if (configuredFromNumber && E164_PHONE_PATTERN.test(configuredFromNumber)) {
