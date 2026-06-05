@@ -4,6 +4,7 @@ import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
 export const contactFormSchema = z.object({
   name: z.string().trim().min(1, "Required").max(100),
+  email: z.string().trim().email("Valid email required").max(254),
   phone: z.string().trim().min(7, "Valid phone required").max(20),
   property: z.string().trim().min(1, "Select one").max(100),
   issue: z.string().trim().min(1, "Select one").max(100),
@@ -54,6 +55,7 @@ export const submitContactRequest = createServerFn({ method: "POST" })
 
     const { error: saveError } = await supabaseAdmin.from("contact_messages").insert({
       name: data.name,
+      email: data.email,
       phone: data.phone,
       property: data.property,
       issue: data.issue,
@@ -67,6 +69,7 @@ export const submitContactRequest = createServerFn({ method: "POST" })
     const smsBody = [
       `MYTRN form submission`,
       `Name: ${data.name}`,
+      `Email: ${data.email}`,
       `Phone: ${data.phone}`,
       `Property: ${data.property}`,
       `Issue: ${data.issue}`,
@@ -80,11 +83,12 @@ export const submitContactRequest = createServerFn({ method: "POST" })
           headers: { "Content-Type": "application/json", Accept: "application/json" },
           body: JSON.stringify({
             name: data.name,
-            email: data.phone,
+            email: data.email,
             phone: data.phone,
             property: data.property,
             issue: data.issue,
             message: cleanMessage,
+            _subject: `MYTRN contact request from ${data.name}`,
           }),
         });
         if (!res.ok) {
