@@ -63,7 +63,7 @@ export const submitContactRequest = createServerFn({ method: "POST" })
     });
 
     if (saveError) {
-      throw new Error(`Could not save contact request: ${saveError.message}`);
+      console.error("Could not save contact request", saveError.message);
     }
 
     const smsBody = [
@@ -101,29 +101,29 @@ export const submitContactRequest = createServerFn({ method: "POST" })
 
     const twilioPromise = (async () => {
       try {
-      const LOVABLE_API_KEY = process.env.LOVABLE_API_KEY;
-      const TWILIO_API_KEY = process.env.TWILIO_API_KEY;
+        const LOVABLE_API_KEY = process.env.LOVABLE_API_KEY;
+        const TWILIO_API_KEY = process.env.TWILIO_API_KEY;
 
-      if (LOVABLE_API_KEY && TWILIO_API_KEY) {
-        const twilioFromNumber = await getTwilioFromNumber(LOVABLE_API_KEY, TWILIO_API_KEY);
-        const smsResponse = await fetch(`${TWILIO_GATEWAY_URL}/Messages.json`, {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${LOVABLE_API_KEY}`,
-            "X-Connection-Api-Key": TWILIO_API_KEY,
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          body: new URLSearchParams({
-            To: SMS_TO,
-            From: twilioFromNumber,
-            Body: smsBody,
-          }),
-        });
+        if (LOVABLE_API_KEY && TWILIO_API_KEY) {
+          const twilioFromNumber = await getTwilioFromNumber(LOVABLE_API_KEY, TWILIO_API_KEY);
+          const smsResponse = await fetch(`${TWILIO_GATEWAY_URL}/Messages.json`, {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${LOVABLE_API_KEY}`,
+              "X-Connection-Api-Key": TWILIO_API_KEY,
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: new URLSearchParams({
+              To: SMS_TO,
+              From: twilioFromNumber,
+              Body: smsBody,
+            }),
+          });
 
-        if (!smsResponse.ok) {
-          console.error("SMS notification failed", smsResponse.status, await smsResponse.text());
+          if (!smsResponse.ok) {
+            console.error("SMS notification failed", smsResponse.status, await smsResponse.text());
+          }
         }
-      }
       } catch (error) {
         console.error("SMS notification skipped", error);
       }
