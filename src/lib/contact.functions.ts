@@ -14,6 +14,7 @@ export type ContactFormInput = z.infer<typeof contactFormSchema>;
 
 const TWILIO_GATEWAY_URL = "https://connector-gateway.lovable.dev/twilio";
 const SMS_TO = "+15108905790";
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/mqeokdvo";
 const E164_PHONE_PATTERN = /^\+[1-9]\d{7,14}$/;
 
 async function getTwilioFromNumber(lovableApiKey: string, twilioApiKey: string) {
@@ -72,7 +73,30 @@ export const submitContactRequest = createServerFn({ method: "POST" })
       `Message: ${cleanMessage}`,
     ].join("\n");
 
-    try {
+    const formspreePromise = (async () => {
+      try {
+        const res = await fetch(FORMSPREE_ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify({
+            name: data.name,
+            email: data.phone,
+            phone: data.phone,
+            property: data.property,
+            issue: data.issue,
+            message: cleanMessage,
+          }),
+        });
+        if (!res.ok) {
+          console.error("Formspree submission failed", res.status, await res.text());
+        }
+      } catch (error) {
+        console.error("Formspree submission skipped", error);
+      }
+    })();
+
+    const twilioPromise = (async () => {
+      try {
       const LOVABLE_API_KEY = process.env.LOVABLE_API_KEY;
       const TWILIO_API_KEY = process.env.TWILIO_API_KEY;
 
@@ -96,9 +120,12 @@ export const submitContactRequest = createServerFn({ method: "POST" })
           console.error("SMS notification failed", smsResponse.status, await smsResponse.text());
         }
       }
-    } catch (error) {
-      console.error("SMS notification skipped", error);
-    }
+      } catch (error) {
+        console.error("SMS notification skipped", error);
+      }
+    })();
+
+    await Promise.allSettled([formspreePromise, twilioPromise]);
 
     return { success: true };
   });
