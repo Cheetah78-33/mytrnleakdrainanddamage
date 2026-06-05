@@ -99,10 +99,13 @@ function Page() {
         <form onSubmit={onSubmit} className="glass-dark rounded-sm p-8 space-y-5">
         <div className="grid sm:grid-cols-2 gap-5">
          <Field label="Name" name="name" error={errors.name} />
-         <Field label="Phone" name="phone" type="tel" error={errors.phone} />
+         <Field label="Email" name="email" type="email" error={errors.email} />
         </div>
         <div className="grid sm:grid-cols-2 gap-5">
+         <Field label="Phone" name="phone" type="tel" error={errors.phone} />
          <Select label="Property Type" name="property" options={["Residential","Commercial","Property Management","Restaurant / Kitchen","Other"]} error={errors.property} />
+        </div>
+        <div className="grid sm:grid-cols-2 gap-5">
          <Select label="Issue Type" name="issue" options={["Water Leak","Drain Backup","Sewer Backup","Damage Repair","Remodel / Rebuild","Other"]} error={errors.issue} />
         </div>
         <div>
