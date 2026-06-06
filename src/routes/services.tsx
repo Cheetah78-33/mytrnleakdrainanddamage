@@ -10,7 +10,7 @@ import valve from "@/assets/valve.jpg";
 import bathroomRebuild from "@/assets/remodel-after.png.asset.json";
 import kitchenRestoration from "@/assets/kitchen-restoration-new.png.asset.json";
 import tenantImprovements from "@/assets/tenant-improvements-floor.png.asset.json";
-import interiorUpgrades from "@/assets/repair-toilet.png.asset.json";
+import interiorUpgrades from "@/assets/bathroom-interior-upgrade.png.asset.json";
 
 export const Route = createFileRoute("/services")({
  head: () => ({ meta: [
