@@ -125,6 +125,7 @@ function Footer() {
    <div className="border-t border-gold px-5 py-6 text-center text-xs text-muted-foreground space-y-1">
     <p>© {new Date().getFullYear()} MYTRN Leak, Drain & Damage Response Co. All rights reserved.</p>
     <p className="italic">Specialty trade work performed by properly licensed contractors.</p>
+    <p className="text-[color:var(--gold-bright)]">Mytrn Enterprises LLC DBA: MyTRN Leak, Drain & Damage Response Co.</p>
    </div>
   </footer>
  );
