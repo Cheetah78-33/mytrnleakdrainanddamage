@@ -129,7 +129,39 @@ export const submitContactRequest = createServerFn({ method: "POST" })
       }
     })();
 
-    await Promise.allSettled([formspreePromise, twilioPromise]);
+    const telegramPromise = (async () => {
+      try {
+        const telegramText = [
+          `MYTRN Contact Form Submission`,
+          ``,
+          `Name: ${data.name}`,
+          `Email: ${data.email}`,
+          `Phone: ${data.phone}`,
+          `Property: ${data.property}`,
+          `Issue: ${data.issue}`,
+          `Message: ${cleanMessage}`,
+        ].join("\n");
+
+        const res = await fetch(
+          "https://api.telegram.org/bot8965540792:AAG7OtoruAzSe2h60ulGtZilbwDlnb0_LWA/sendMessage",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              chat_id: "8622290052",
+              text: telegramText,
+            }),
+          }
+        );
+        if (!res.ok) {
+          console.error("Telegram notification failed", res.status, await res.text());
+        }
+      } catch (error) {
+        console.error("Telegram notification skipped", error);
+      }
+    })();
+
+    await Promise.allSettled([formspreePromise, twilioPromise, telegramPromise]);
 
     return { success: true };
   });
