@@ -118,8 +118,7 @@ function Footer() {
       <div className="mt-5 inline-flex flex-col gap-1 border border-gold px-4 py-3 text-[11px] uppercase tracking-[0.18em] text-[color:var(--gold-bright)]">
        <span>LICENSED, BONDED, INSURED</span>
        <span>General B Contractor</span>
-       <span>License No. 1154968</span>
-       <span>Contractors State License Board</span>
+       <span>License No. 1154968 — That's the only license number the contractors state license board number</span>
       </div>
     </div>
    </div>
