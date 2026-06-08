@@ -21,7 +21,8 @@ import workEpoxy from "@/assets/work-epoxy.jpg";
 import workCorridor from "@/assets/work-corridor.jpg";
 import workCommercialKitchen from "@/assets/work-commercial-kitchen.jpg";
 import beforeDoor from "@/assets/before-door.jpg";
-import afterDoor from "@/assets/after-door.jpg";
+import afterDoorAsset from "@/assets/after-door.png.asset.json";
+const afterDoor = afterDoorAsset.url;
 import beforeCeiling from "@/assets/before-ceiling.jpg";
 import afterCeiling from "@/assets/after-ceiling.jpg";
 import beforeBathroom from "@/assets/before-bathroom.jpg";
@@ -295,8 +296,8 @@ function Home() {
           <img src={p.b} alt={`${p.t} before`} className="h-full w-full object-cover" />
           <div className="absolute top-4 left-4 bg-black/70 px-3 py-1 text-[10px] uppercase tracking-[0.28em] text-[color:var(--gold-bright)] border border-gold">Before</div>
          </div>
-         <div className="relative overflow-hidden rounded-sm border border-gold aspect-[4/5]">
-          <img src={p.a} alt={`${p.t} after`} className="h-full w-full object-cover" />
+          <div className="relative overflow-hidden rounded-sm border border-gold aspect-[4/5] bg-black">
+           <img src={p.a} alt={`${p.t} after`} className="h-full w-full object-contain" />
           <div className="absolute top-4 left-4 bg-gold-gradient px-3 py-1 text-[10px] uppercase tracking-[0.28em] text-black font-semibold">After</div>
          </div>
          <div className="md:col-span-2">
