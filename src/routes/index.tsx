@@ -21,7 +21,7 @@ import workEpoxy from "@/assets/work-epoxy.jpg";
 import workCorridor from "@/assets/work-corridor.jpg";
 import workCommercialKitchen from "@/assets/work-commercial-kitchen.jpg";
 import beforeDoor from "@/assets/before-door.jpg";
-import afterDoor from "@/assets/after-door.jpg";
+import afterDoor from "@/assets/after-door.png.asset.json";
 import beforeCeiling from "@/assets/before-ceiling.jpg";
 import afterCeiling from "@/assets/after-ceiling.jpg";
 import beforeBathroom from "@/assets/before-bathroom.jpg";
