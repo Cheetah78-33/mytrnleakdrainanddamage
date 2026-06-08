@@ -296,8 +296,8 @@ function Home() {
           <img src={p.b} alt={`${p.t} before`} className="h-full w-full object-cover" />
           <div className="absolute top-4 left-4 bg-black/70 px-3 py-1 text-[10px] uppercase tracking-[0.28em] text-[color:var(--gold-bright)] border border-gold">Before</div>
          </div>
-         <div className="relative overflow-hidden rounded-sm border border-gold aspect-[4/5]">
-          <img src={p.a} alt={`${p.t} after`} className="h-full w-full object-cover" />
+          <div className="relative overflow-hidden rounded-sm border border-gold aspect-[4/5] bg-black">
+           <img src={p.a} alt={`${p.t} after`} className="h-full w-full object-contain" />
           <div className="absolute top-4 left-4 bg-gold-gradient px-3 py-1 text-[10px] uppercase tracking-[0.28em] text-black font-semibold">After</div>
          </div>
          <div className="md:col-span-2">
