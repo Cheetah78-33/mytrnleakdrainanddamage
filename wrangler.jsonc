@@ -4,7 +4,15 @@
   "compatibility_date": "2026-01-01",
   "compatibility_flags": ["nodejs_compat"],
 
+  "main": "dist/server/server.js",
+
   "assets": {
     "directory": "./dist/client"
+  },
+
+  "alias": {
+    "#tanstack-router-entry": "./dist/server/assets/router.js",
+    "#tanstack-start-entry": "./dist/server/server.js",
+    "tanstack-start-manifest:v": "./dist/server/assets/_tanstack-start-manifest_v-*.js"
   }
 }
