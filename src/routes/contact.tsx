@@ -40,7 +40,7 @@ function Page() {
    setSubmitting(true);
    setSubmitError("");
    setErrors({});
-   await submitRequest({ data: r.data });
+   await submitRequest(r.data);
    setDone(true);
   } catch {
    setSubmitError("We couldn't send your request right now. Please call 510-890-5790 for immediate help.");
