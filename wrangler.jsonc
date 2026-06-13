@@ -1,9 +1,11 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "tanstack-start-app",
-  "compatibility_date": "2025-09-24",
+  "name": "mytrnleakdrainanddamage",
+  "compatibility_date": "2026-01-01",
   "compatibility_flags": ["nodejs_compat"],
+
   "main": "dist/server/server.js",
+
   "assets": {
     "directory": "./dist/client"
   }
