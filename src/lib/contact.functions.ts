@@ -50,7 +50,7 @@ async function getTwilioFromNumber(lovableApiKey: string, twilioApiKey: string) 
 
 export const submitContactRequest = createServerFn({ method: "POST" })
   .inputValidator((input) => contactFormSchema.parse(input))
-  .handler(async ({ data }) => {
+  .handler(async (data) => {
     const cleanMessage = data.message?.trim() || "No message provided.";
 
     const { error: saveError } = await supabaseAdmin.from("contact_messages").insert({
