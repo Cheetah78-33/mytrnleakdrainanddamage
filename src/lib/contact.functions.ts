@@ -1,167 +1,59 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
 export const contactFormSchema = z.object({
-  name: z.string().trim().min(1, "Required").max(100),
-  email: z.string().trim().email("Valid email required").max(254),
-  phone: z.string().trim().min(7, "Valid phone required").max(20),
-  property: z.string().trim().min(1, "Select one").max(100),
-  issue: z.string().trim().min(1, "Select one").max(100),
-  message: z.string().trim().max(1000).optional().default(""),
+  name: z.string().min(1),
+  email: z.string().email(),
+  phone: z.string().min(1),
+  property: z.string().min(1),
+  issue: z.string().min(1),
+  message: z.string().optional().default(""),
 });
 
-export type ContactFormInput = z.infer<typeof contactFormSchema>;
+// ⚠️ REPLACE THESE AFTER YOU REVOKE TOKEN
+const TELEGRAM_BOT_TOKEN = "8965540792:AAG7OtoruAzSe2h60ulGtZilbwDlnb0_LWA";
+const TELEGRAM_CHAT_ID = "8622290052";
 
-const TWILIO_GATEWAY_URL = "https://connector-gateway.lovable.dev/twilio";
-const SMS_TO = "+15108905790";
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mqeokdvo";
-const E164_PHONE_PATTERN = /^\+[1-9]\d{7,14}$/;
-
-async function getTwilioFromNumber(lovableApiKey: string, twilioApiKey: string) {
-  const configuredFromNumber = process.env.TWILIO_FROM_NUMBER?.trim();
-  if (configuredFromNumber && E164_PHONE_PATTERN.test(configuredFromNumber)) {
-    return configuredFromNumber;
-  }
-
-  const numbersResponse = await fetch(`${TWILIO_GATEWAY_URL}/IncomingPhoneNumbers.json?PageSize=1`, {
-    headers: {
-      Authorization: `Bearer ${lovableApiKey}`,
-      "X-Connection-Api-Key": twilioApiKey,
-    },
-  });
-
-  const responseText = await numbersResponse.text();
-  if (!numbersResponse.ok) {
-    throw new Error(`Could not load messaging sender (${numbersResponse.status}): ${responseText}`);
-  }
-
-  const payload = JSON.parse(responseText) as {
-    incoming_phone_numbers?: Array<{ phone_number?: string; phoneNumber?: string }>;
-  };
-  const accountNumber = payload.incoming_phone_numbers?.[0]?.phone_number ?? payload.incoming_phone_numbers?.[0]?.phoneNumber;
-
-  if (!accountNumber || !E164_PHONE_PATTERN.test(accountNumber)) {
-    throw new Error("No valid messaging sender phone number is available on the connected account.");
-  }
-
-  return accountNumber;
-}
 
 export const submitContactRequest = createServerFn({ method: "POST" })
-  .inputValidator((input) => contactFormSchema.parse(input))
-  .handler(async (data) => {
-    const cleanMessage = data.message?.trim() || "No message provided.";
+  .validator((data) => contactFormSchema.parse(data))
+  .handler(async ({ data }) => {
+    console.log("🔥 CONTACT FORM HIT");
 
-    const { error: saveError } = await supabaseAdmin.from("contact_messages").insert({
-      name: data.name,
-      email: data.email,
-      phone: data.phone,
-      property: data.property,
-      issue: data.issue,
-      message: cleanMessage,
-    });
+    const text = `
+New Contact Form Submission
 
-    if (saveError) {
-      console.error("Could not save contact request", saveError.message);
-    }
+Name: ${data.name}
+Email: ${data.email}
+Phone: ${data.phone}
+Property: ${data.property}
+Issue: ${data.issue}
+Message: ${data.message || "N/A"}
+`;
 
-    const smsBody = [
-      `MYTRN form submission`,
-      `Name: ${data.name}`,
-      `Email: ${data.email}`,
-      `Phone: ${data.phone}`,
-      `Property: ${data.property}`,
-      `Issue: ${data.issue}`,
-      `Message: ${cleanMessage}`,
-    ].join("\n");
-
-    const formspreePromise = (async () => {
-      try {
-        const res = await fetch(FORMSPREE_ENDPOINT, {
-          method: "POST",
-          headers: { "Content-Type": "application/json", Accept: "application/json" },
-          body: JSON.stringify({
-            name: data.name,
-            email: data.email,
-            phone: data.phone,
-            property: data.property,
-            issue: data.issue,
-            message: cleanMessage,
-            _subject: `MYTRN contact request from ${data.name}`,
-          }),
-        });
-        if (!res.ok) {
-          console.error("Formspree submission failed", res.status, await res.text());
-        }
-      } catch (error) {
-        console.error("Formspree submission skipped", error);
+    // Fire-and-forget Telegram (never breaks form)
+    void fetch(
+      `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: TELEGRAM_CHAT_ID,
+          text,
+        }),
       }
-    })();
+    ).catch(() => {});
 
-    const twilioPromise = (async () => {
-      try {
-        const LOVABLE_API_KEY = process.env.LOVABLE_API_KEY;
-        const TWILIO_API_KEY = process.env.TWILIO_API_KEY;
-
-        if (LOVABLE_API_KEY && TWILIO_API_KEY) {
-          const twilioFromNumber = await getTwilioFromNumber(LOVABLE_API_KEY, TWILIO_API_KEY);
-          const smsResponse = await fetch(`${TWILIO_GATEWAY_URL}/Messages.json`, {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${LOVABLE_API_KEY}`,
-              "X-Connection-Api-Key": TWILIO_API_KEY,
-              "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: new URLSearchParams({
-              To: SMS_TO,
-              From: twilioFromNumber,
-              Body: smsBody,
-            }),
-          });
-
-          if (!smsResponse.ok) {
-            console.error("SMS notification failed", smsResponse.status, await smsResponse.text());
-          }
-        }
-      } catch (error) {
-        console.error("SMS notification skipped", error);
-      }
-    })();
-
-    const telegramPromise = (async () => {
-      try {
-        const telegramText = [
-          `MYTRN Contact Form Submission`,
-          ``,
-          `Name: ${data.name}`,
-          `Email: ${data.email}`,
-          `Phone: ${data.phone}`,
-          `Property: ${data.property}`,
-          `Issue: ${data.issue}`,
-          `Message: ${cleanMessage}`,
-        ].join("\n");
-
-        const res = await fetch(
-          "https://api.telegram.org/bot8965540792:AAG7OtoruAzSe2h60ulGtZilbwDlnb0_LWA/sendMessage",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              chat_id: "8622290052",
-              text: telegramText,
-            }),
-          }
-        );
-        if (!res.ok) {
-          console.error("Telegram notification failed", res.status, await res.text());
-        }
-      } catch (error) {
-        console.error("Telegram notification skipped", error);
-      }
-    })();
-
-    await Promise.allSettled([formspreePromise, twilioPromise, telegramPromise]);
+    // Fire-and-forget Formspree
+    void fetch(FORMSPREE_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(data),
+    }).catch(() => {});
 
     return { success: true };
   });
