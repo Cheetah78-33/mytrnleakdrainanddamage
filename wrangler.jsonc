@@ -8,11 +8,5 @@
 
   "assets": {
     "directory": "./dist/client"
-  },
-
-  "alias": {
-    "#tanstack-router-entry": "./dist/server/assets/router.js",
-    "#tanstack-start-entry": "./dist/server/server.js",
-    "tanstack-start-manifest:v": "./dist/server/assets/_tanstack-start-manifest_v-09Oyg_Ic.js"
   }
 }
