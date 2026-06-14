@@ -1,3 +1,4 @@
+```ts
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
@@ -20,7 +21,7 @@ const TELEGRAM_BOT_TOKEN =
 const TELEGRAM_CHAT_ID = "8622290052";
 
 export const submitContactRequest = createServerFn({ method: "POST" })
-  .inputValidator((input) => contactFormSchema.parse(input))
+  .validator((input) => contactFormSchema.parse(input))
   .handler(async ({ data }) => {
     const cleanMessage = data.message?.trim() || "No message provided.";
 
@@ -47,19 +48,7 @@ export const submitContactRequest = createServerFn({ method: "POST" })
           text: telegramText,
         }),
       }
-    )
-      .then(async (res) => {
-        if (!res.ok) {
-          console.error(
-            "Telegram failed:",
-            res.status,
-            await res.text()
-          );
-        }
-      })
-      .catch((err) => {
-        console.error("Telegram error:", err);
-      });
+    );
 
     const formspreePromise = fetch(FORMSPREE_ENDPOINT, {
       method: "POST",
@@ -76,19 +65,7 @@ export const submitContactRequest = createServerFn({ method: "POST" })
         message: cleanMessage,
         _subject: `MYTRN contact request from ${data.name}`,
       }),
-    })
-      .then(async (res) => {
-        if (!res.ok) {
-          console.error(
-            "Formspree failed:",
-            res.status,
-            await res.text()
-          );
-        }
-      })
-      .catch((err) => {
-        console.error("Formspree error:", err);
-      });
+    });
 
     await Promise.allSettled([
       telegramPromise,
@@ -99,3 +76,4 @@ export const submitContactRequest = createServerFn({ method: "POST" })
       success: true,
     };
   });
+```
