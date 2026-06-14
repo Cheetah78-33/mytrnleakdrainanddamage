@@ -1,4 +1,3 @@
-```ts
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
@@ -15,18 +14,17 @@ export type ContactFormInput = z.infer<typeof contactFormSchema>;
 
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mqeokdvo";
 
-const TELEGRAM_BOT_TOKEN =
-  "8965540792:AAG7OtoruAzSe2h60ulGtZilbwDlnb0_LWA";
-
-const TELEGRAM_CHAT_ID = "8622290052";
+// Telegram (your bot)
+const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN!;
+const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID!;
 
 export const submitContactRequest = createServerFn({ method: "POST" })
-  .validator((input) => contactFormSchema.parse(input))
+  .inputValidator((input) => contactFormSchema.parse(input))
   .handler(async ({ data }) => {
     const cleanMessage = data.message?.trim() || "No message provided.";
 
-    const telegramText = [
-      "🚨 MYTRN Contact Form Submission",
+    const text = [
+      "🚨 MYTRN Contact Form",
       "",
       `Name: ${data.name}`,
       `Email: ${data.email}`,
@@ -36,20 +34,20 @@ export const submitContactRequest = createServerFn({ method: "POST" })
       `Message: ${cleanMessage}`,
     ].join("\n");
 
+    // 1. Telegram
     const telegramPromise = fetch(
       `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
       {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           chat_id: TELEGRAM_CHAT_ID,
-          text: telegramText,
+          text,
         }),
       }
-    );
+    ).catch((e) => console.error("Telegram error", e));
 
+    // 2. Formspree
     const formspreePromise = fetch(FORMSPREE_ENDPOINT, {
       method: "POST",
       headers: {
@@ -63,17 +61,10 @@ export const submitContactRequest = createServerFn({ method: "POST" })
         property: data.property,
         issue: data.issue,
         message: cleanMessage,
-        _subject: `MYTRN contact request from ${data.name}`,
       }),
-    });
+    }).catch((e) => console.error("Formspree error", e));
 
-    await Promise.allSettled([
-      telegramPromise,
-      formspreePromise,
-    ]);
+    await Promise.allSettled([telegramPromise, formspreePromise]);
 
-    return {
-      success: true,
-    };
+    return { success: true };
   });
-```
