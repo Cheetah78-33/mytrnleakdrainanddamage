@@ -19,7 +19,7 @@ const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 
 export const submitContactRequest = createServerFn({ method: "POST" })
-  .inputValidator((input) => contactFormSchema.parse(input))
+  .validator(contactFormSchema)
   .handler(async (data: ContactFormInput) => {
     const cleanMessage = data.message?.trim() || "No message provided.";
 
