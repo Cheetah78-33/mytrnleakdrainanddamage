@@ -1,6 +1,9 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
+/**
+ * Schema
+ */
 export const contactFormSchema = z.object({
   name: z.string().trim().min(1),
   email: z.string().email(),
@@ -12,55 +15,67 @@ export const contactFormSchema = z.object({
 
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mqeokdvo";
 
-const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
-
-if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
-  throw new Error("Missing Telegram environment variables");
-}
-
+/**
+ * Server Function
+ */
 export const submitContactRequest = createServerFn({ method: "POST" })
-  .validator((data: unknown) => contactFormSchema.parse(data))
+  .validator(contactFormSchema)
   .handler(async (data) => {
-    const cleanMessage = data.message || "No message provided.";
+    // ENV VARS MUST BE INSIDE HANDLER (Cloudflare-safe)
+    const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+    const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 
-    const text = `
-🚨 MYTRN Contact Form
+    if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
+      throw new Error("Missing Telegram environment variables");
+    }
 
-Name: ${data.name}
-Email: ${data.email}
-Phone: ${data.phone}
-Property: ${data.property}
-Issue: ${data.issue}
-Message: ${cleanMessage}
-`;
+    const cleanMessage = data.message?.trim() || "No message provided.";
 
-    await Promise.allSettled([
-      fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+    const text = [
+      "🚨 MYTRN Contact Form",
+      "",
+      `Name: ${data.name}`,
+      `Email: ${data.email}`,
+      `Phone: ${data.phone}`,
+      `Property: ${data.property}`,
+      `Issue: ${data.issue}`,
+      `Message: ${cleanMessage}`,
+    ].join("\n");
+
+    const telegramPromise = fetch(
+      `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
+      {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           chat_id: TELEGRAM_CHAT_ID,
           text,
         }),
-      }),
+      }
+    );
 
-      fetch(FORMSPREE_ENDPOINT, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          name: data.name,
-          email: data.email,
-          phone: data.phone,
-          property: data.property,
-          issue: data.issue,
-          message: cleanMessage,
-        }),
+    const formspreePromise = fetch(FORMSPREE_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        property: data.property,
+        issue: data.issue,
+        message: cleanMessage,
       }),
+    });
+
+    const results = await Promise.allSettled([
+      telegramPromise,
+      formspreePromise,
     ]);
+
+    console.log("Contact form results:", results);
 
     return { success: true };
   });
