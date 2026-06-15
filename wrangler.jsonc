@@ -6,6 +6,10 @@
 
   "main": "dist/server/server.js",
 
+  "vars": {
+    "TELEGRAM_CHAT_ID": "8622290052"
+  },
+
   "assets": {
     "directory": "./dist/client"
   }
