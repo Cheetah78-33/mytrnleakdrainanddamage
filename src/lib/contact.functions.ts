@@ -14,19 +14,14 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mqeokdvo";
 
 export const submitContactRequest = createServerFn({ method: "POST" })
   .validator(contactFormSchema)
-  .handler(async ({ data, context }) => {
-    // ✅ Cloudflare/TanStack Start runtime env
-    const env = context?.env as {
-      TELEGRAM_BOT_TOKEN?: string;
-      TELEGRAM_CHAT_ID?: string;
-    };
-
-    const TELEGRAM_BOT_TOKEN = env?.TELEGRAM_BOT_TOKEN;
-    const TELEGRAM_CHAT_ID = env?.TELEGRAM_CHAT_ID;
+  .handler(async ({ data }) => {
+    // ✅ Cloudflare Workers env (THIS is the correct way in TanStack Start)
+    const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+    const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 
     if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
-      console.error("Missing Telegram env vars:", env);
-      throw new Error("Server misconfigured: missing Telegram env vars");
+      console.error("Missing Telegram env vars");
+      throw new Error("Server misconfigured");
     }
 
     const cleanMessage = data.message?.trim() || "No message provided.";
@@ -42,7 +37,6 @@ export const submitContactRequest = createServerFn({ method: "POST" })
       `Message: ${cleanMessage}`,
     ].join("\n");
 
-    // 1. Telegram
     const telegramPromise = fetch(
       `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
       {
@@ -55,7 +49,6 @@ export const submitContactRequest = createServerFn({ method: "POST" })
       }
     ).catch((e) => console.error("Telegram error:", e));
 
-    // 2. Formspree fallback
     const formspreePromise = fetch(FORMSPREE_ENDPOINT, {
       method: "POST",
       headers: {
