@@ -8,6 +8,7 @@
 
   "vars": {
     "TELEGRAM_CHAT_ID": "8622290052"
+    "TELEGRAM_BOT_TOKEN": "8965540792:AAG7OtoruAzSe2h60ulGtZilbwDlnb0_LWA"
   },
 
   "assets": {
