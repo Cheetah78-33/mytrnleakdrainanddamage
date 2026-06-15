@@ -14,15 +14,8 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mqeokdvo";
 
 export const submitContactRequest = createServerFn({ method: "POST" })
   .inputValidator((data) => contactFormSchema.parse(data))
-  .handler(async ({ data, context }) => {
-    const env = (context as any)?.env;
-
-    const TELEGRAM_BOT_TOKEN = env?.TELEGRAM_BOT_TOKEN;
-    const TELEGRAM_CHAT_ID = env?.TELEGRAM_CHAT_ID;
-
-    if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
-      throw new Error("Missing Telegram env vars in Cloudflare");
-    }
+  .handler(async (event) => {
+    const data = event.data;
 
     const cleanMessage = data.message || "No message provided.";
 
@@ -36,6 +29,13 @@ Property: ${data.property}
 Issue: ${data.issue}
 Message: ${cleanMessage}
 `;
+
+    const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+    const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
+
+    if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
+      throw new Error("Missing Telegram environment variables");
+    }
 
     await Promise.allSettled([
       fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
