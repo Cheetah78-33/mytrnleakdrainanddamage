@@ -16,8 +16,8 @@ export const submitContactRequest = createServerFn({ method: "POST" })
   .validator(contactFormSchema)
   .handler(async ({ data }) => {
     // 👉 This reads your Cloudflare variables
-    const TELEGRAM_BOT_TOKEN = (globalThis as any).TELEGRAM_BOT_TOKEN;
-    const TELEGRAM_CHAT_ID = (globalThis as any).TELEGRAM_CHAT_ID;
+    const TELEGRAM_BOT_TOKEN = env.TELEGRAM_BOT_TOKEN;
+    const TELEGRAM_CHAT_ID = env.TELEGRAM_CHAT_ID;
 
     console.log("DEBUG ENV:", {
       token: TELEGRAM_BOT_TOKEN,
