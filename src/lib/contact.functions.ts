@@ -15,19 +15,24 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mqeokdvo";
 export const submitContactRequest = createServerFn({ method: "POST" })
   .validator(contactFormSchema)
   .handler(async ({ data, context }) => {
-    console.log("SERVER FN START");
-
     const env = context?.env as {
       TELEGRAM_BOT_TOKEN?: string;
       TELEGRAM_CHAT_ID?: string;
     };
 
-    console.log("ENV CHECK", {
-      hasToken: !!env?.TELEGRAM_BOT_TOKEN,
-      chatId: env?.TELEGRAM_CHAT_ID,
+    const TELEGRAM_BOT_TOKEN = env?.TELEGRAM_BOT_TOKEN;
+    const TELEGRAM_CHAT_ID = env?.TELEGRAM_CHAT_ID;
+
+    console.log("ENV CHECK:", {
+      hasToken: !!TELEGRAM_BOT_TOKEN,
+      hasChatId: !!TELEGRAM_CHAT_ID,
     });
 
-    const cleanMessage = data.message?.trim() || "No message provided.";
+    if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
+      throw new Error("Missing Telegram environment variables");
+    }
+
+    const cleanMessage = (data.message || "").trim() || "No message provided.";
 
     const text = [
       "🚨 MYTRN Contact Form",
@@ -40,55 +45,55 @@ export const submitContactRequest = createServerFn({ method: "POST" })
       `Message: ${cleanMessage}`,
     ].join("\n");
 
-    try {
-      const telegramResponse = await fetch(
-        `https://api.telegram.org/bot${env?.TELEGRAM_BOT_TOKEN}/sendMessage`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            chat_id: env?.TELEGRAM_CHAT_ID,
-            text,
-          }),
-        }
-      );
-
-      const telegramText = await telegramResponse.text();
-
-      console.log("TELEGRAM STATUS", telegramResponse.status);
-      console.log("TELEGRAM RESPONSE", telegramText);
-    } catch (err) {
-      console.error("TELEGRAM ERROR", err);
-    }
-
-    try {
-      const formspreeResponse = await fetch(FORMSPREE_ENDPOINT, {
+    // ---- TELEGRAM ----
+    const telegramRes = await fetch(
+      `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
+      {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: data.name,
-          email: data.email,
-          phone: data.phone,
-          property: data.property,
-          issue: data.issue,
-          message: cleanMessage,
+          chat_id: TELEGRAM_CHAT_ID,
+          text,
         }),
-      });
+      }
+    );
 
-      const formspreeText = await formspreeResponse.text();
+    const telegramData = await telegramRes.json().catch(() => null);
 
-      console.log("FORMSPREE STATUS", formspreeResponse.status);
-      console.log("FORMSPREE RESPONSE", formspreeText);
-    } catch (err) {
-      console.error("FORMSPREE ERROR", err);
-    }
+    console.log("TELEGRAM RESPONSE:", {
+      ok: telegramRes.ok,
+      status: telegramRes.status,
+      data: telegramData,
+    });
+
+    // ---- FORMSPREE ----
+    const formspreeRes = await fetch(FORMSPREE_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        property: data.property,
+        issue: data.issue,
+        message: cleanMessage,
+      }),
+    });
+
+    const formspreeData = await formspreeRes.json().catch(() => null);
+
+    console.log("FORMSPREE RESPONSE:", {
+      ok: formspreeRes.ok,
+      status: formspreeRes.status,
+      data: formspreeData,
+    });
 
     return {
       success: true,
+      telegram: telegramRes.ok,
+      formspree: formspreeRes.ok,
     };
   });
