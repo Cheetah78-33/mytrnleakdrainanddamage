@@ -14,15 +14,15 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mqeokdvo";
 
 export const submitContactRequest = createServerFn({ method: "POST" })
   .validator(contactFormSchema)
-  .handler(async ({ data, context }) => {
-    // ✅ WORKERS FIX: explicitly type env correctly
-    const env = (context as any)?.env as {
-      TELEGRAM_BOT_TOKEN?: string;
-      TELEGRAM_CHAT_ID?: string;
+  .handler(async ({ data }) => {
+    // ✅ DIRECT WORKERS ENV ACCESS (NO context, NO guessing)
+    const env = globalThis as unknown as {
+      TELEGRAM_BOT_TOKEN: string;
+      TELEGRAM_CHAT_ID: string;
     };
 
-    const TELEGRAM_BOT_TOKEN = env?.TELEGRAM_BOT_TOKEN;
-    const TELEGRAM_CHAT_ID = env?.TELEGRAM_CHAT_ID;
+    const TELEGRAM_BOT_TOKEN = env.TELEGRAM_BOT_TOKEN;
+    const TELEGRAM_CHAT_ID = env.TELEGRAM_CHAT_ID;
 
     console.log("ENV CHECK:", {
       token: !!TELEGRAM_BOT_TOKEN,
@@ -33,8 +33,6 @@ export const submitContactRequest = createServerFn({ method: "POST" })
       throw new Error("Missing Telegram env vars in Workers runtime");
     }
 
-    const cleanMessage = data.message?.trim() || "No message provided.";
-
     const text = [
       "🚨 NEW CONTACT FORM",
       "",
@@ -43,10 +41,9 @@ export const submitContactRequest = createServerFn({ method: "POST" })
       `Phone: ${data.phone}`,
       `Property: ${data.property}`,
       `Issue: ${data.issue}`,
-      `Message: ${cleanMessage}`,
+      `Message: ${data.message || "No message"}`,
     ].join("\n");
 
-    // ✅ Telegram send
     const telegramRes = await fetch(
       `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
       {
@@ -59,10 +56,14 @@ export const submitContactRequest = createServerFn({ method: "POST" })
       }
     );
 
-    const telegramData = await telegramRes.json();
-    console.log("Telegram response:", telegramData);
+    const telegramJson = await telegramRes.json();
+    console.log("Telegram response:", telegramJson);
 
-    // ✅ Formspree (don’t block)
+    if (!telegramJson.ok) {
+      throw new Error("Telegram API failed");
+    }
+
+    // Fire and forget Formspree
     fetch(FORMSPREE_ENDPOINT, {
       method: "POST",
       headers: {
@@ -75,7 +76,7 @@ export const submitContactRequest = createServerFn({ method: "POST" })
         phone: data.phone,
         property: data.property,
         issue: data.issue,
-        message: cleanMessage,
+        message: data.message,
       }),
     }).catch(console.error);
 
