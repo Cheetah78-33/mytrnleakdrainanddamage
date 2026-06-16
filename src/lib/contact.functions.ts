@@ -15,20 +15,25 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mqeokdvo";
 export const submitContactRequest = createServerFn({ method: "POST" })
   .validator(contactFormSchema)
   .handler(async ({ data, context }) => {
-    // ✅ Cloudflare Worker env (THIS is the correct way)
+    // ✅ Cloudflare Workers env (correct way for your setup)
     const env = (context as any)?.env ?? {};
+
+    console.log("🔥 CONTACT FUNCTION HIT");
+
+    console.log("ENV CHECK:", {
+      hasToken: !!env.TELEGRAM_BOT_TOKEN,
+      hasChatId: !!env.TELEGRAM_CHAT_ID,
+    });
 
     const TELEGRAM_BOT_TOKEN = env.TELEGRAM_BOT_TOKEN;
     const TELEGRAM_CHAT_ID = env.TELEGRAM_CHAT_ID;
 
-    console.log("ENV CHECK:", {
-      hasToken: !!TELEGRAM_BOT_TOKEN,
-      hasChatId: !!TELEGRAM_CHAT_ID,
-    });
-
     if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
-      console.error("Missing env vars");
-      return { success: false, error: "Missing env vars" };
+      console.error("❌ Missing env vars");
+      return {
+        success: false,
+        error: "Missing TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID",
+      };
     }
 
     const cleanMessage = data.message?.trim() || "No message provided.";
@@ -42,41 +47,56 @@ export const submitContactRequest = createServerFn({ method: "POST" })
       `Issue: ${data.issue}\n` +
       `Message: ${cleanMessage}`;
 
-    // 🚀 Telegram
-    const telegramPromise = fetch(
-      `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
-      {
+    // 🚀 TELEGRAM REQUEST (now fully visible + debuggable)
+    let telegramResponseJson: any = null;
+    let telegramStatus: number | null = null;
+
+    try {
+      const telegramRes = await fetch(
+        `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            chat_id: TELEGRAM_CHAT_ID,
+            text,
+          }),
+        }
+      );
+
+      telegramStatus = telegramRes.status;
+      telegramResponseJson = await telegramRes.json();
+
+      console.log("📨 TELEGRAM STATUS:", telegramStatus);
+      console.log("📨 TELEGRAM RESPONSE:", telegramResponseJson);
+    } catch (err) {
+      console.error("❌ TELEGRAM FETCH FAILED:", err);
+    }
+
+    // 📩 FORMPSREE (non-blocking)
+    try {
+      await fetch(FORMSPREE_ENDPOINT, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
         body: JSON.stringify({
-          chat_id: TELEGRAM_CHAT_ID,
-          text,
+          name: data.name,
+          email: data.email,
+          phone: data.phone,
+          property: data.property,
+          issue: data.issue,
+          message: cleanMessage,
         }),
-      }
-    ).then(async (r) => {
-      const json = await r.json();
-      console.log("TELEGRAM RESPONSE:", json);
-      return json;
-    });
+      });
+    } catch (err) {
+      console.error("❌ FORMSPREE ERROR:", err);
+    }
 
-    // 📩 Formspree (non-blocking)
-    const formspreePromise = fetch(FORMSPREE_ENDPOINT, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        name: data.name,
-        email: data.email,
-        phone: data.phone,
-        property: data.property,
-        issue: data.issue,
-        message: cleanMessage,
-      }),
-    }).catch((err) => console.error("Formspree error:", err));
-
-    await Promise.allSettled([telegramPromise, formspreePromise]);
-
-    return { success: true };
+    return {
+      success: true,
+      telegramStatus,
+      telegramResponse: telegramResponseJson,
+    };
   });
