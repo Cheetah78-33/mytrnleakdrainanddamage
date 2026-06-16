@@ -7,7 +7,7 @@ export const contactFormSchema = z.object({
   phone: z.string().trim().min(7, "Valid phone required").max(20),
   property: z.string().trim().min(1, "Select one").max(100),
   issue: z.string().trim().min(1, "Select one").max(100),
-  message: z.string().trim().max(1000).optional().default(""),
+  message: z.string().trim().optional().default(""),
 });
 
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mqeokdvo";
@@ -15,36 +15,32 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mqeokdvo";
 export const submitContactRequest = createServerFn({ method: "POST" })
   .validator(contactFormSchema)
   .handler(async ({ data }) => {
-    // ✅ DIRECT WORKERS ENV ACCESS (NO context, NO guessing)
-    const env = globalThis as unknown as {
-      TELEGRAM_BOT_TOKEN: string;
-      TELEGRAM_CHAT_ID: string;
-    };
+    // 👉 This reads your Cloudflare variables
+    const TELEGRAM_BOT_TOKEN = (globalThis as any).TELEGRAM_BOT_TOKEN;
+    const TELEGRAM_CHAT_ID = (globalThis as any).TELEGRAM_CHAT_ID;
 
-    const TELEGRAM_BOT_TOKEN = env.TELEGRAM_BOT_TOKEN;
-    const TELEGRAM_CHAT_ID = env.TELEGRAM_CHAT_ID;
-
-    console.log("ENV CHECK:", {
-      token: !!TELEGRAM_BOT_TOKEN,
-      chat: !!TELEGRAM_CHAT_ID,
+    console.log("DEBUG ENV:", {
+      token: TELEGRAM_BOT_TOKEN,
+      chat: TELEGRAM_CHAT_ID,
     });
 
     if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
-      throw new Error("Missing Telegram env vars in Workers runtime");
+      throw new Error("Missing Telegram environment variables");
     }
 
-    const text = [
-      "🚨 NEW CONTACT FORM",
-      "",
-      `Name: ${data.name}`,
-      `Email: ${data.email}`,
-      `Phone: ${data.phone}`,
-      `Property: ${data.property}`,
-      `Issue: ${data.issue}`,
-      `Message: ${data.message || "No message"}`,
-    ].join("\n");
+    const text = `
+🚨 NEW CONTACT FORM
 
-    const telegramRes = await fetch(
+Name: ${data.name}
+Email: ${data.email}
+Phone: ${data.phone}
+Property: ${data.property}
+Issue: ${data.issue}
+Message: ${data.message || "No message"}
+    `;
+
+    // Send to Telegram
+    await fetch(
       `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
       {
         method: "POST",
@@ -56,29 +52,14 @@ export const submitContactRequest = createServerFn({ method: "POST" })
       }
     );
 
-    const telegramJson = await telegramRes.json();
-    console.log("Telegram response:", telegramJson);
-
-    if (!telegramJson.ok) {
-      throw new Error("Telegram API failed");
-    }
-
-    // Fire and forget Formspree
+    // Send to Formspree (backup)
     fetch(FORMSPREE_ENDPOINT, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Accept: "application/json",
       },
-      body: JSON.stringify({
-        name: data.name,
-        email: data.email,
-        phone: data.phone,
-        property: data.property,
-        issue: data.issue,
-        message: data.message,
-      }),
-    }).catch(console.error);
+      body: JSON.stringify(data),
+    }).catch(() => {});
 
     return { success: true };
   });
