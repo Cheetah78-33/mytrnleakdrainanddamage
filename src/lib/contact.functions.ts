@@ -14,36 +14,34 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mqeokdvo";
 
 export const submitContactRequest = createServerFn({ method: "POST" })
   .validator(contactFormSchema)
-  .handler(async ({ data, context }) => {
-    // Cloudflare/TanStack Start env
-    const env = (context as any)?.env || {};
-
-    const TELEGRAM_BOT_TOKEN = env.TELEGRAM_BOT_TOKEN;
-    const TELEGRAM_CHAT_ID = env.TELEGRAM_CHAT_ID;
+  .handler(async ({ data }) => {
+    // ✅ Cloudflare Pages env (THIS is the fix)
+    const TELEGRAM_BOT_TOKEN = globalThis.TELEGRAM_BOT_TOKEN;
+    const TELEGRAM_CHAT_ID = globalThis.TELEGRAM_CHAT_ID;
 
     console.log("ENV CHECK:", {
-      hasToken: !!TELEGRAM_BOT_TOKEN,
-      hasChatId: !!TELEGRAM_CHAT_ID,
+      token: !!TELEGRAM_BOT_TOKEN,
+      chat: !!TELEGRAM_CHAT_ID,
     });
 
     if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
-      throw new Error("Missing Telegram env vars at runtime");
+      throw new Error("Missing Telegram env vars");
     }
 
     const cleanMessage = data.message?.trim() || "No message provided.";
 
-    const text = [
-      "🚨 NEW CONTACT FORM",
-      "",
-      `Name: ${data.name}`,
-      `Email: ${data.email}`,
-      `Phone: ${data.phone}`,
-      `Property: ${data.property}`,
-      `Issue: ${data.issue}`,
-      `Message: ${cleanMessage}`,
-    ].join("\n");
+    const text = `
+🚨 NEW CONTACT FORM
 
-    // Telegram
+Name: ${data.name}
+Email: ${data.email}
+Phone: ${data.phone}
+Property: ${data.property}
+Issue: ${data.issue}
+Message: ${cleanMessage}
+`.trim();
+
+    // 🔥 Telegram send
     const telegramRes = await fetch(
       `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
       {
@@ -57,14 +55,9 @@ export const submitContactRequest = createServerFn({ method: "POST" })
     );
 
     const telegramData = await telegramRes.json();
-
     console.log("Telegram response:", telegramData);
 
-    if (!telegramData.ok) {
-      console.error("Telegram FAILED:", telegramData);
-    }
-
-    // Formspree (don’t block Telegram)
+    // 🔥 Formspree (non-blocking)
     fetch(FORMSPREE_ENDPOINT, {
       method: "POST",
       headers: {
