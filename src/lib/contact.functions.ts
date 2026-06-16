@@ -14,10 +14,15 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mqeokdvo";
 
 export const submitContactRequest = createServerFn({ method: "POST" })
   .validator(contactFormSchema)
-  .handler(async ({ data }) => {
-    // ✅ Cloudflare Pages env (THIS is the fix)
-    const TELEGRAM_BOT_TOKEN = globalThis.TELEGRAM_BOT_TOKEN;
-    const TELEGRAM_CHAT_ID = globalThis.TELEGRAM_CHAT_ID;
+  .handler(async ({ data, context }) => {
+    // ✅ WORKERS FIX: explicitly type env correctly
+    const env = (context as any)?.env as {
+      TELEGRAM_BOT_TOKEN?: string;
+      TELEGRAM_CHAT_ID?: string;
+    };
+
+    const TELEGRAM_BOT_TOKEN = env?.TELEGRAM_BOT_TOKEN;
+    const TELEGRAM_CHAT_ID = env?.TELEGRAM_CHAT_ID;
 
     console.log("ENV CHECK:", {
       token: !!TELEGRAM_BOT_TOKEN,
@@ -25,23 +30,23 @@ export const submitContactRequest = createServerFn({ method: "POST" })
     });
 
     if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
-      throw new Error("Missing Telegram env vars");
+      throw new Error("Missing Telegram env vars in Workers runtime");
     }
 
     const cleanMessage = data.message?.trim() || "No message provided.";
 
-    const text = `
-🚨 NEW CONTACT FORM
+    const text = [
+      "🚨 NEW CONTACT FORM",
+      "",
+      `Name: ${data.name}`,
+      `Email: ${data.email}`,
+      `Phone: ${data.phone}`,
+      `Property: ${data.property}`,
+      `Issue: ${data.issue}`,
+      `Message: ${cleanMessage}`,
+    ].join("\n");
 
-Name: ${data.name}
-Email: ${data.email}
-Phone: ${data.phone}
-Property: ${data.property}
-Issue: ${data.issue}
-Message: ${cleanMessage}
-`.trim();
-
-    // 🔥 Telegram send
+    // ✅ Telegram send
     const telegramRes = await fetch(
       `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
       {
@@ -57,7 +62,7 @@ Message: ${cleanMessage}
     const telegramData = await telegramRes.json();
     console.log("Telegram response:", telegramData);
 
-    // 🔥 Formspree (non-blocking)
+    // ✅ Formspree (don’t block)
     fetch(FORMSPREE_ENDPOINT, {
       method: "POST",
       headers: {
