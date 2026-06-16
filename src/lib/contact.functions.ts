@@ -14,14 +14,22 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mqeokdvo";
 
 export const submitContactRequest = createServerFn({ method: "POST" })
   .validator(contactFormSchema)
-  .handler(async ({ data }) => {
-    // ✅ Cloudflare Workers env (THIS is the correct way in TanStack Start)
-    const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-    const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
+  .handler(async ({ data, context }) => {
+    const env = context?.env as {
+      TELEGRAM_BOT_TOKEN?: string;
+      TELEGRAM_CHAT_ID?: string;
+    };
+
+    const TELEGRAM_BOT_TOKEN = env?.TELEGRAM_BOT_TOKEN;
+    const TELEGRAM_CHAT_ID = env?.TELEGRAM_CHAT_ID;
+
+    console.log("ENV CHECK:", {
+      hasToken: !!TELEGRAM_BOT_TOKEN,
+      hasChatId: !!TELEGRAM_CHAT_ID,
+    });
 
     if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
-      console.error("Missing Telegram env vars");
-      throw new Error("Server misconfigured");
+      throw new Error("Missing Telegram environment variables");
     }
 
     const cleanMessage = data.message?.trim() || "No message provided.";
@@ -37,19 +45,33 @@ export const submitContactRequest = createServerFn({ method: "POST" })
       `Message: ${cleanMessage}`,
     ].join("\n");
 
-    const telegramPromise = fetch(
+    // Telegram
+    const telegramRes = await fetch(
       `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
       {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           chat_id: TELEGRAM_CHAT_ID,
           text,
         }),
       }
-    ).catch((e) => console.error("Telegram error:", e));
+    );
 
-    const formspreePromise = fetch(FORMSPREE_ENDPOINT, {
+    const telegramData = await telegramRes.json();
+
+    console.log("TELEGRAM RESPONSE:", telegramData);
+
+    if (!telegramRes.ok || telegramData.ok === false) {
+      throw new Error(
+        `Telegram failed: ${JSON.stringify(telegramData)}`
+      );
+    }
+
+    // Formspree
+    const formspreeRes = await fetch(FORMSPREE_ENDPOINT, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -63,9 +85,13 @@ export const submitContactRequest = createServerFn({ method: "POST" })
         issue: data.issue,
         message: cleanMessage,
       }),
-    }).catch((e) => console.error("Formspree error:", e));
+    });
 
-    await Promise.allSettled([telegramPromise, formspreePromise]);
+    const formspreeData = await formspreeRes.json();
 
-    return { success: true };
+    console.log("FORMSPREE RESPONSE:", formspreeData);
+
+    return {
+      success: true,
+    };
   });
