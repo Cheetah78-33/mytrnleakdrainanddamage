@@ -14,10 +14,14 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mqeokdvo";
 
 export const submitContactRequest = createServerFn({ method: "POST" })
   .validator(contactFormSchema)
-  .handler(async ({ data }) => {
-    // ✅ Cloudflare Workers ENV (THIS is the correct way)
-    const TELEGRAM_BOT_TOKEN = globalThis?.process?.env?.TELEGRAM_BOT_TOKEN;
-    const TELEGRAM_CHAT_ID = globalThis?.process?.env?.TELEGRAM_CHAT_ID;
+  .handler(async ({ data, context }) => {
+    console.log("🔥 CONTACT FUNCTION HIT");
+
+    // Cloudflare Worker env (THIS is correct for your setup)
+    const env = (context as any)?.env || {};
+
+    const TELEGRAM_BOT_TOKEN = env.TELEGRAM_BOT_TOKEN;
+    const TELEGRAM_CHAT_ID = env.TELEGRAM_CHAT_ID;
 
     console.log("ENV CHECK:", {
       hasToken: !!TELEGRAM_BOT_TOKEN,
@@ -39,7 +43,6 @@ Issue: ${data.issue}
 Message: ${data.message || "No message"}
 `;
 
-    // Telegram send
     const telegramRes = await fetch(
       `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
       {
@@ -55,7 +58,6 @@ Message: ${data.message || "No message"}
     const telegramData = await telegramRes.json();
     console.log("Telegram response:", telegramData);
 
-    // Formspree (non-blocking)
     fetch(FORMSPREE_ENDPOINT, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
