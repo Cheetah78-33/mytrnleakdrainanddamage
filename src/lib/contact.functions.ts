@@ -2,11 +2,11 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
 export const contactFormSchema = z.object({
-  name: z.string().trim().min(1).max(100),
-  email: z.string().trim().email().max(254),
-  phone: z.string().trim().min(7).max(20),
-  property: z.string().trim().min(1).max(100),
-  issue: z.string().trim().min(1).max(100),
+  name: z.string().trim().min(1, "Required").max(100),
+  email: z.string().trim().email("Valid email required").max(254),
+  phone: z.string().trim().min(7, "Valid phone required").max(20),
+  property: z.string().trim().min(1, "Select one").max(100),
+  issue: z.string().trim().min(1, "Select one").max(100),
   message: z.string().trim().max(1000).optional().default(""),
 });
 
@@ -15,10 +15,8 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mqeokdvo";
 export const submitContactRequest = createServerFn({ method: "POST" })
   .validator(contactFormSchema)
   .handler(async ({ data, context }) => {
-    console.log("🔥 CONTACT FUNCTION HIT");
-
-    // Cloudflare Worker env (THIS is correct for your setup)
-    const env = (context as any)?.env || {};
+    // ✅ Cloudflare Worker env (THIS is the correct way)
+    const env = (context as any)?.env ?? {};
 
     const TELEGRAM_BOT_TOKEN = env.TELEGRAM_BOT_TOKEN;
     const TELEGRAM_CHAT_ID = env.TELEGRAM_CHAT_ID;
@@ -29,21 +27,23 @@ export const submitContactRequest = createServerFn({ method: "POST" })
     });
 
     if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
-      throw new Error("Missing Telegram env vars");
+      console.error("Missing env vars");
+      return { success: false, error: "Missing env vars" };
     }
 
-    const text = `
-🚨 NEW CONTACT FORM
+    const cleanMessage = data.message?.trim() || "No message provided.";
 
-Name: ${data.name}
-Email: ${data.email}
-Phone: ${data.phone}
-Property: ${data.property}
-Issue: ${data.issue}
-Message: ${data.message || "No message"}
-`;
+    const text =
+      `🚨 NEW CONTACT FORM\n\n` +
+      `Name: ${data.name}\n` +
+      `Email: ${data.email}\n` +
+      `Phone: ${data.phone}\n` +
+      `Property: ${data.property}\n` +
+      `Issue: ${data.issue}\n` +
+      `Message: ${cleanMessage}`;
 
-    const telegramRes = await fetch(
+    // 🚀 Telegram
+    const telegramPromise = fetch(
       `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
       {
         method: "POST",
@@ -53,16 +53,30 @@ Message: ${data.message || "No message"}
           text,
         }),
       }
-    );
+    ).then(async (r) => {
+      const json = await r.json();
+      console.log("TELEGRAM RESPONSE:", json);
+      return json;
+    });
 
-    const telegramData = await telegramRes.json();
-    console.log("Telegram response:", telegramData);
-
-    fetch(FORMSPREE_ENDPOINT, {
+    // 📩 Formspree (non-blocking)
+    const formspreePromise = fetch(FORMSPREE_ENDPOINT, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    }).catch(console.error);
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        property: data.property,
+        issue: data.issue,
+        message: cleanMessage,
+      }),
+    }).catch((err) => console.error("Formspree error:", err));
+
+    await Promise.allSettled([telegramPromise, formspreePromise]);
 
     return { success: true };
   });
